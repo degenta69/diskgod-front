@@ -1,0 +1,15 @@
+
+html, body, #root{
+  @apply h-full
+}
+
+.hideScrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hideScrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.w-35{
+  width: 35%;
+}

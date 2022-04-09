@@ -1,0 +1,22 @@
+.badgeFont{
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+}
+.servericon{
+
+transition: all 200ms ease-in-out;
+}
+.servericon:hover{
+border-radius: 73% 20% 96% 63%;
+}
+.hole {
+    bottom: -4px;
+    right: -5px;
+}
+.badge {
+    bottom: 3px;
+    right: 2px;
+}

@@ -1,0 +1,14 @@
+.guildSeparator-a4uisj {
+    height: 2px;
+    width: 32px;
+    border-radius: 1px;
+    background-color: rgba(79,84,92,0.48);
+    margin: auto;
+}
+
+@media (max-width: 900px) {
+    .guildSeparator-a4uisj {
+    height: 32px;
+    width: 2px;
+    }
+}
