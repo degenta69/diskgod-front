@@ -1,19 +1,20 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    isHome: false,
-  userName:'',
-  userEmail:'',
-  userId:'',
-  userAvatar:'',
-  userStatus:'',
-  userStatusMessage:'',
-  newState:'{"isGroupChat":true,"users":[{"name":"John Doe","email":"jon@example.com"},{"name":"Piyush","email":"piyush@example.com"},{"name":"Guest User","email":"guest@example.com"}],"_id":"617a518c4081150716472c78","chatName":"Friends","groupAdmin":{"name":"Guest User","email":"guest@example.com"}}',
-
-}
+  isHome: true,
+  name: "",
+  email: "",
+  userId: "",
+  profilePic: "",
+  userStatus: "",
+  userStatusMessage: "",
+  newState:
+    '{"isGroupChat":false,"users":[{"name":"","email":""},{"name":"","email":""},{"name":"","email":""}],"_id":"","chatName":"","groupAdmin":{"name":"","email":""}}',
+  rerender:false
+  };
 
 export const serverDetailSlice = createSlice({
-  name: 'serverDetail',
+  name: "serverDetail",
   initialState,
   reducers: {
     getDetail: (state) => {
@@ -21,27 +22,11 @@ export const serverDetailSlice = createSlice({
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      return state
+      return state;
     },
-    addServerDetail: (state, action) => {
-      const newState = JSON.stringify(action.payload)
-      if(action.payload.home){
-        state.isHome = true
-      }else{
-        state.isHome = false
-      }
-      return {...state,newState: newState}
-    },
-    addHomeDetail: (state, action) => {  
-      state.userName = action.payload.userName
-      state.userEmail = action.payload.userEmail
-      state.userId = action.payload.userId
-      state.userAvatar = action.payload.userAvatar
-      state.userStatus = action.payload.userStatus
-      state.userStatusMessage = action.payload.userStatusMessage
-      state.isHome = true
-      return {...state}
-    },
+    addServerDetail: (state, action) => { state.newState = JSON.stringify(action.payload); state.isHome = false},
+    addHomeDetail: (state) => {state.isHome = true}, 
+    addRerender: (state) => {state.rerender = !state.rerender}
     // decrement: (state) => {
     //   state.value -= 1
     // },
@@ -49,9 +34,10 @@ export const serverDetailSlice = createSlice({
     //   state.value += action.payload
     // },
   },
-})
+});
 
 // Action creators are generated for each case reducer function
-export const { getDetail, addServerDetail } = serverDetailSlice.actions
+export const { getDetail, addServerDetail, addHomeDetail, addRerender } =
+  serverDetailSlice.actions;
 
-export default serverDetailSlice.reducer
+export default serverDetailSlice.reducer;

@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { addUser } from "../../state/userInfoData/userInfoSlice";
 
 const LoginForm = () => {
   const nav = useNavigate();
@@ -15,6 +17,8 @@ const LoginForm = () => {
       [e.target.name]: e.target.value,
     });
   };
+  const dispatch = useDispatch()
+  const userDetails = useSelector(state => state.userInfo)
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (userInfo.email === "" || userInfo.password === "") {
@@ -23,7 +27,7 @@ const LoginForm = () => {
     const loginReq = await axios
       .post(`http://localhost:8080/api/user/login`, userInfo)
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
         if(err.toString().indexOf('401')>-1){
           return setError("Invalid Credentials ");
         }
@@ -45,11 +49,13 @@ const LoginForm = () => {
       });
 
     if (loginReq) {
+      dispatch(addUser({...loginReq.data.user}))
       localStorage.setItem(
-        "userToken",
+        "diskGodUserToken",
         JSON.stringify({ access: loginReq.data.token })
       );
       nav("/home");
+      window.location.reload();
       setError(null);
     }
   };

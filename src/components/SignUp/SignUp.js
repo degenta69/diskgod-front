@@ -23,8 +23,9 @@ const SignUp = () => {
     // console.log(userInfo);
     const loginReq = await axios.post(`http://localhost:8080/api/user/signup`, userInfo);
     // console.log(loginReq);
-    localStorage.setItem("userToken", JSON.stringify({access:loginReq.data.token}));
+    localStorage.setItem("diskGodUserToken", JSON.stringify({access:loginReq.data.token}));
     if (loginReq.status === 200) {
+      window.location.reload();
       nav("/home");
     }
     nav("/login");

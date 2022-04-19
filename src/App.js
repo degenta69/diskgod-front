@@ -1,16 +1,14 @@
 import "./App.css";
-import Main from "./pages/Main";
-import AuthPage from "./pages/AuthPage";
-import Login from "./components/Login/Login";
-import SignUp from "./components/SignUp/SignUp";
 import { Outlet } from "react-router-dom";
+import Main from "./pages/Main";
 
 function App() {
+  
   return (
     <>
       <div className="App h-full text-center">
-        <Outlet/>
         {/* loading skeleton */}
+        <Main/>
         {/* react router
       /
       /auth

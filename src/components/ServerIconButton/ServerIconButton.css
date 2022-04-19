@@ -12,6 +12,10 @@ transition: all 200ms ease-in-out;
 .servericon:hover{
 border-radius: 73% 20% 96% 63%;
 }
+.active-server{
+border-radius: 73% 20% 96% 63%;
+outline: 2px solid #786c6c;
+}
 .hole {
     bottom: -4px;
     right: -5px;

@@ -1,22 +1,24 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ServerIconButton from "../ServerIconButton/ServerIconButton";
-import Tooltip from '@mui/material/Tooltip'
 import { useDispatch, useSelector } from "react-redux";
-import { createAction } from "@reduxjs/toolkit";
 import { addServerDetail } from "../../state/serverDetailData/serverDetailSlice";
+import { fetchMessagesByChatid } from "../../state/messageData/messageDataSlice";
 
 
 
 const ServerListings = ({ data }) => {
+  // console.log(process.env.REACT_APP_BASE_URL)
 
     const dispatch = useDispatch();
 const serverDetails = useSelector(state => state.serverDetail)
+
   const handleServerData = async(server) => {
-    //  const action = createAction(addServerDetail)
-    //  action(server)
     dispatch(addServerDetail({...server}))
-    const data = await JSON.parse(serverDetails.newState)
-    //   console.log('clicked',data,'current',server)
+    const selected = await JSON.parse(serverDetails.newState)
+    dispatch(fetchMessagesByChatid(server._id))
+      // console.log('clicked',selected,'current',server)
+      document.getElementsByClassName('active-server')[0]?.classList.remove('active-server')
+      document.getElementById(server._id)?.classList.add('active-server')
 
   }
 
@@ -24,9 +26,9 @@ const serverDetails = useSelector(state => state.serverDetail)
     <>
       {data.map((server, key) => {
         return (
-          <div  key={key} onClick={()=>{handleServerData(server)}} className="z-40 ">
+          <div  key={key} id={`serverData${server._id}`} onClick={()=>{handleServerData(server)}} className="z-40 ">
             {/* <Tooltip placement="right" arrow title={server.chatName}> */}
-            <ServerIconButton data={server} show={true} usersNumber={server.users.length} />
+            <ServerIconButton _id={server._id} data={server} show={true} serversNumber={data.length} usersNumber={server.users.length} />
             {/* </Tooltip> */}
           </div>
         );

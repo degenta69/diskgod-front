@@ -1,0 +1,108 @@
+.searchBar-2aylmZ {
+    margin: 16px 20px 8px 30px;
+    flex: none;
+}
+
+.container-2oNtJn, .inner-2pOSmK {
+    box-sizing: border-box;
+    display: flex;
+}
+
+.container-2oNtJn {
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: #202225;
+}
+
+
+
+.inner-2pOSmK {
+  position: relative;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 1px;
+  min-width: 0;
+
+  /*  -webkit-box-sizing: border-box; */
+  box-sizing: border-box;
+  /* display: -webkit-box; */
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+}
+
+.medium-2NClDM .input-2m5SfJ,
+.medium-2NClDM .tag-Pxnlt9 {
+  font-size: 16px;
+  line-height: 32px;
+  height: 30px;
+  padding: 0 8px;
+}
+
+.input-2m5SfJ {
+  box-sizing: border-box;
+  background: #212224;
+  border: none;
+  resize: none;
+  -webkit-box-flex: 1;
+  flex: 1;
+  min-width: 48px;
+  margin: 1px;
+  appearance: none;
+  color: #dcddde;
+
+  text-rendering: optimizeLegibility;
+  font-weight: 400;
+}
+
+.medium-2NClDM.iconLayout-3Bjizv {
+  width: 32px;
+  height: 32px;
+}
+
+.iconLayout-3Bjizv {
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  cursor: text;
+
+  box-sizing: border-box;
+  outline: 0;
+}
+
+.medium-2NClDM .iconContainer-6pgShY {
+    width: 20px;
+    height: 20px;
+}
+
+.iconContainer-6pgShY {
+    position: relative;
+    
+}
+
+.icon-3CDcPB {
+margin:5px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 1;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    -webkit-transition: opacity .1s ease-out,-webkit-transform .1s ease-out;
+    transition: all .1s ease-out,-webkit-transform .1s ease-out;
+    transition: transform .1s ease-out,opacity .1s ease-out;
+    transition: transform .1s ease-out,opacity .1s ease-out,-webkit-transform .1s ease-out;
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+    color: #b9bbbe;
+}
+
+
+

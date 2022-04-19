@@ -1,0 +1,13 @@
+.css-1exzfg6-MuiListItem-root > .MuiListItemButton-root {
+  padding-right: 0px !important;
+}
+
+.css-et1ao3-MuiTypography-root {
+  font-weight: 800 !important;
+  font-size: 0.875rem !important;
+}
+.css-1pqm26d-MuiAvatar-img {
+  object-fit: contain !important;
+  width: 40px !important;
+  height: 40px !important;
+}

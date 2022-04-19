@@ -1,29 +1,39 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { store } from "./state/store";
-import { Provider } from "react-redux";
-import './assets/main.css';
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import store,{ persistor } from "./state/store";
+import { Provider as ReduxProvider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 import Main from "./pages/Main";
 import AuthPage from "./pages/AuthPage";
 import SignUp from "./components/SignUp/SignUp";
+import Loader from "./components/Loader/Loader";
 import Login from "./components/Login/Login";
+import App from "./App";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Provider store={store}>
+    <ReduxProvider store={store}>
+      {/* <PersistGate loading={  null
+        // <div className="mx-auto flex items-center w-full p-2" >
+        // <Loader  border={10} />
+        // </div>
+      } persistor={persistor}> */}
       <Router>
         <Routes>
-          <Route path="/" element={<App />}>
+          <Route path="/" >
+            <Route
+              path="/"
+              element={
+                <Navigate to="/home" replace />
+              }
+            />
             <Route
               path="*"
               element={
-                <main style={{ padding: "1rem" }}>
-                  <p>There's nothing here!</p>
-                </main>
+                <Navigate to="/home" replace />
               }
             />
           </Route>
@@ -41,7 +51,8 @@ ReactDOM.render(
           </Route>
         </Routes>
       </Router>
-    </Provider>
+      {/* </PersistGate> */}
+    </ReduxProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

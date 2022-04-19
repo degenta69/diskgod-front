@@ -7,8 +7,8 @@ axios.defaults.baseURL = `${process.env.REACT_APP_BASE_URL}`
 
 // axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'http://localhost:3000';
 
-var authTokens = localStorage.getItem('userToken')
-  ? JSON.parse(localStorage.getItem('userToken'))
+var authTokens = localStorage.getItem('diskGodUserToken')
+  ? JSON.parse(localStorage.getItem('diskGodUserToken'))
   : null
 
 const instance = axios.create({
@@ -20,11 +20,11 @@ const instance = axios.create({
 })
 
 // interceptor for refreshing the access token
-if (localStorage.getItem('userToken')) {
+if (localStorage.getItem('diskGodUserToken')) {
   instance.interceptors.request.use(req => {
     //checks if the token is there, if not then adds it in the storage and header
-    var authToken = localStorage.getItem('userToken')
-      ? JSON.parse(localStorage.getItem('userToken'))
+    var authToken = localStorage.getItem('diskGodUserToken')
+      ? JSON.parse(localStorage.getItem('diskGodUserToken'))
       : null
 
     //decodes the jwt access token to get the expiration date then compares it with current date and time
@@ -56,7 +56,7 @@ if (localStorage.getItem('userToken')) {
             authTokens.access = accessToken
             // then adds new access token to the storage(automatically to the authAtom too) and headers
             let stringTokens=JSON.stringify(authTokens)
-            localStorage.setItem('userToken', stringTokens)
+            localStorage.setItem('diskGodUserToken', stringTokens)
             // console.log('isExpired:', isExpired, res, 'authTokens:',authTokens,'NewaccesToken:',accessToken)
           })
           .catch(err => {
