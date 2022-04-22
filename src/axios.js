@@ -2,8 +2,7 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import dayjs from 'dayjs'
 
-// axios.defaults.baseURL = `${process.env.REACT_APP_API_CORSANYWHERE}${process.env.REACT_APP_BASE_URL}`
-axios.defaults.baseURL = `${process.env.REACT_APP_BASE_URL}`
+axios.defaults.baseURL = ``
 
 // axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'http://localhost:3000';
 
@@ -12,8 +11,7 @@ var authTokens = localStorage.getItem('diskGodUserToken')
   : null
 
 const instance = axios.create({
-  // baseURL: `${process.env.REACT_APP_API_CORSANYWHERE}${process.env.REACT_APP_BASE_URL}`,
-  baseURL: `${process.env.REACT_APP_BASE_URL}`,
+  baseURL: ``,
   headers: {
     Authorization: `Bearer ${authTokens?.access}`
   },

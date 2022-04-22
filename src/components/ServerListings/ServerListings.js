@@ -7,7 +7,6 @@ import { fetchMessagesByChatid } from "../../state/messageData/messageDataSlice"
 
 
 const ServerListings = ({ data }) => {
-  // console.log(process.env.REACT_APP_BASE_URL)
 
     const dispatch = useDispatch();
 const serverDetails = useSelector(state => state.serverDetail)

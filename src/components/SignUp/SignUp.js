@@ -21,7 +21,7 @@ const SignUp = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
     // console.log(userInfo);
-    const loginReq = await axios.post(`http://localhost:8080/api/user/signup`, userInfo);
+    const loginReq = await axios.post(`/api/user/signup`, userInfo);
     // console.log(loginReq);
     localStorage.setItem("diskGodUserToken", JSON.stringify({access:loginReq.data.token}));
     if (loginReq.status === 200) {

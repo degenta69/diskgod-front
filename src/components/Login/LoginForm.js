@@ -25,7 +25,7 @@ const LoginForm = () => {
       return setError("Please fill all the fields");
     }
     const loginReq = await axios
-      .post(`http://localhost:8080/api/user/login`, userInfo)
+      .post(`/api/user/login`, userInfo)
       .catch((err) => {
         // console.log(err);
         if(err.toString().indexOf('401')>-1){
