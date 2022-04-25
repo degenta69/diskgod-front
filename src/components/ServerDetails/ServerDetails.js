@@ -46,6 +46,7 @@ const [isLoading, setisLoading] = useState(true);
       }
       setdata(data);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverDetails]);
 
   const [checked, setChecked] = React.useState([]);

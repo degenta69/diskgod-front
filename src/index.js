@@ -9,18 +9,18 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-d
 import Main from "./pages/Main";
 import AuthPage from "./pages/AuthPage";
 import SignUp from "./components/SignUp/SignUp";
-import Loader from "./components/Loader/Loader";
+// import Loader from "./components/Loader/Loader";
 import Login from "./components/Login/Login";
-import App from "./App";
+// import App from "./App";
 
 ReactDOM.render(
   <React.StrictMode>
     <ReduxProvider store={store}>
-      {/* <PersistGate loading={  null
+      <PersistGate loading={  null
         // <div className="mx-auto flex items-center w-full p-2" >
         // <Loader  border={10} />
         // </div>
-      } persistor={persistor}> */}
+      } persistor={persistor}>
       <Router>
         <Routes>
           <Route path="/" >
@@ -51,7 +51,7 @@ ReactDOM.render(
           </Route>
         </Routes>
       </Router>
-      {/* </PersistGate> */}
+      </PersistGate>
     </ReduxProvider>
   </React.StrictMode>,
   document.getElementById("root")

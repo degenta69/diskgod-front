@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addUser } from "../../state/userInfoData/userInfoSlice";
 
@@ -18,7 +18,7 @@ const LoginForm = () => {
     });
   };
   const dispatch = useDispatch()
-  const userDetails = useSelector(state => state.userInfo)
+  // const userDetails = useSelector(state => state.userInfo)
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (userInfo.email === "" || userInfo.password === "") {

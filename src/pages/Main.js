@@ -13,12 +13,13 @@ const Main = () => {
     if (!localStorage.getItem('diskGodUserToken')) {
       nav('/auth/login')
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
     <>
     <AddGroupChatModal/>
-    <div style={{gridTemplateColumns:isMobile?'auto':'5.5% 94.5%',gridTemplateRows:isMobile?'10% 90%':''}} className='grid h-full'> 
+    <div style={{gridTemplateColumns:isMobile?'auto':'5.5% 94.5%',gridTemplateRows:isMobile?'10% 90%':''}} className='grid h-screen'> 
     <div  className='bg-sidebarBG hideScrollbar overflow-x-auto py-3 MAXlg:py-0 MAXlg:px-1 MAXlg:flex MAXlg:items-center'>
 
         <SideBar/>

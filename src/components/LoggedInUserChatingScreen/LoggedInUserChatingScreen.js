@@ -2,22 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 import SendMessageInput from "../SendMessageInput/SendMessageInput";
 import { Box } from "@material-ui/core";
 import "./LoggedInUserChatingScreen.css";
-import { Avatar, Skeleton, Stack, Tooltip, Typography } from "@mui/material";
+import {Tooltip } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { tooltipClasses } from "@mui/material/Tooltip";
 import { useDispatch, useSelector } from "react-redux";
-import instance from "../../axios";
 import dayjs from "dayjs";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
-import { textTransform } from "@mui/system";
+// import { textTransform } from "@mui/system";
 import ScrollableFeed from "react-scrollable-feed";
 import {
-  getDateFormat,
-  isLastMessage,
-  isSameSender,
+  getDateFormat
 } from "../../utils/messageUtils";
 import io from "socket.io-client";
 import { fetchMessagesByChatid } from "../../state/messageData/messageDataSlice";
+import socket, { socketOpen } from "../../socket/socketioLogic";
 // import {  } from "../../state/messageData/messageDataSlice";
 dayjs.extend(LocalizedFormat);
 export const BlackTooltip = styled(({ className, ...props }) => (
@@ -53,8 +51,7 @@ export const BlackTooltip = styled(({ className, ...props }) => (
     },
   },
 }));
-const ENDPOINT = "https://diskgod.herokuapp.com/"
-var socket, selectedChatCompare;
+var selectedChatCompare;
 
 const LoggedInUserChatingScreen = () => {
   const sendMessageInput = useRef();
@@ -71,6 +68,8 @@ const LoggedInUserChatingScreen = () => {
   useEffect(() => {
     let data = JSON.parse(userInfo.newUser);
     setuser(data);
+    sendMessageInput.current.value = "";
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   var rerender = useSelector((state) => state.serverDetail.rerender);
   var serverInfo = useSelector((state) => state.serverDetail);
@@ -80,16 +79,18 @@ const LoggedInUserChatingScreen = () => {
   const [isTyping, setIsTyping] = useState(false);
 const [currentUserTyping , setCurrentUserTyping] = useState('');
   useEffect(() => {
-    let user = JSON.parse(userInfo.newUser);
-    socket = io.connect(ENDPOINT);
-    socket.emit("setup", user);
-    socket.on("connected", () => {
-      console.log(user);
-      console.log("connected to server");
+
+    try {
+      socketOpen();
       setSocketConnected(true);
-    });
+    } catch (error) {
+      console.log(error);
+      setSocketConnected(false);
+    }
+
     socket.on("typing" , (user)=>{setIsTyping(true);setCurrentUserTyping(user)});
     socket.on("stop typing" , ()=>setIsTyping(false))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // const [content, setContent] = useState("");
@@ -112,6 +113,7 @@ const [currentUserTyping , setCurrentUserTyping] = useState('');
 
     selectedChatCompare = serverDetail;
     socket.emit("join room", serverDetail._id);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerender, serverInfo.newState]);
 
   useEffect(() => {
@@ -211,7 +213,7 @@ const [currentUserTyping , setCurrentUserTyping] = useState('');
                       style={{ color: "#6d6d6e" }}
                       className="chat-box-content"
                     >
-                      <p>{sendMessageInput.current.value}</p>
+                      <p>{sendMessageInput.current?.value}</p>
                     </Box>
                   }
                 </Box>

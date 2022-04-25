@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import ServerNavbar from "../ServerNavbar/ServerNavbar";
+// import ServerNavbar from "../ServerNavbar/ServerNavbar";
 import { Box } from "@material-ui/core";
 import "./SendMessageInput.css";
 import SendIcon from "@mui/icons-material/Send";
@@ -77,6 +77,7 @@ const SendMessageInput = ({
     if (content.length === 0) {
       setRows(1);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [render]);
   const onEnterPress = (e) => {
     if (e.keyCode === 13 && !e.shiftKey) {

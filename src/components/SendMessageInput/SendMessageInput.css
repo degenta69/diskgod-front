@@ -12,8 +12,8 @@
 }
 .sendMessageFormWrapper {
   position: relative;
-  width: 71%;
-  position: fixed;
+  /* width: 71%; */
+  /* position: fixed; */
   bottom: 0;
   left: inherit;
   right: 0;
@@ -37,6 +37,6 @@ color: #f9f3ff;
 
 @media (max-width: 900px) {
   .sendMessageFormWrapper {
-    width: 65%;
+    /* width: 65%; */
   }
 }

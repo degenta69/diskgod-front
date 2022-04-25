@@ -13,6 +13,7 @@ const ChatScreen = () => {
   useEffect(() => {
    let data = JSON.parse(serverDetails.newState)
     setNewServerDetail(data)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverDetails.render]);
 
   // console.log(serverDetails, 'serverDetails');

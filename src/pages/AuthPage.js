@@ -1,7 +1,5 @@
 import React, { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router";
-import Login from "../components/Login/Login";
-import SignUp from "../components/SignUp/SignUp";
 import BackgroundSVG from "../SVG/BackgroundSVG";
 
 const AuthPage = () => {
@@ -19,6 +17,7 @@ const AuthPage = () => {
     }
 
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
   return (
     <div className="h-full w-full relative flex">
