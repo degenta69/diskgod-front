@@ -128,7 +128,7 @@ const [currentUserTyping , setCurrentUserTyping] = useState('');
   return (
     <>
       <Box className="hideScrollbar chat-box-wrapper ">
-        <ScrollableFeed className="hideScrollbar">
+        {/* <ScrollableFeed className="h-full hideScrollbar"> */}
           {messages.map((message, i) => (
             <React.Fragment key={`chat-box-fragment-${i}`}>
               <Box className="chat-box-spacing">
@@ -221,7 +221,7 @@ const [currentUserTyping , setCurrentUserTyping] = useState('');
             </React.Fragment>
           )}
           <div ref={messagesEndRef} />
-        </ScrollableFeed>
+        {/* </ScrollableFeed> */}
       </Box>
 
       <SendMessageInput currentUserTyping={currentUserTyping} user={user} setTyping={setTyping} setIsTyping={setIsTyping} typing={typing} isTyping={isTyping} socketConnected={socketConnected} socket={socket} sendMessageInput={sendMessageInput} />

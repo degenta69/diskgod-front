@@ -22,7 +22,13 @@
 }
 
 .sendMessageFormWrapper form {
-  position: relative;
+  position: fixed;
+  bottom: 0;
+  left: inherit;
+  right: 0;
+  right: inherit;
+  width: calc(100vw - 10vw);
+  height: 6rem;
 }
 .sendMessageIcon:hover {
 color: #f9f3ff;

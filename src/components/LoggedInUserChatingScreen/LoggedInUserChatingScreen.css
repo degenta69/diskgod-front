@@ -27,7 +27,7 @@
 }
 
 .chat-box-wrapper {
-  height: 33rem;
+  height: calc(100% - 17%);
 }
 
 .chat-box-sender-name {
@@ -69,7 +69,7 @@
 
 @media (max-width: 900px) {
   .chat-box-wrapper {
-    height: 29rem;
+    height: calc(100% - 22%);
     overflow-y: scroll;
   }
 }

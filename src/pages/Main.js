@@ -24,7 +24,7 @@ const Main = () => {
 
         <SideBar/>
     </div>
-    <div className='bg-serverBG'>
+    <div className='bg-serverBG h-screen'>
 
         <HomeScreen/>
     </div>

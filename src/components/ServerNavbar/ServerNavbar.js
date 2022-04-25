@@ -15,7 +15,7 @@ export default function ServerNavbar({ isHome, serverDetail }) {
   return isHome? (
     <React.Fragment>
       {/* <CssBaseline /> */}
-      <AppBar sx={{left:"inherit",right:'inherit', top:"inherit",backgroundColor:'inherit'}}>
+      <AppBar sx={{left:"inherit",right:'inherit', position:'relative', height:'7vh' ,top:"inherit",backgroundColor:'inherit'}}>
         <Toolbar >
           <Typography sx={{display:'flex',alignItems: 'center',gap:'0.5rem'}} variant="h6" component="div">
             <HashtagSvg color='#8F9296'/>
@@ -27,7 +27,7 @@ export default function ServerNavbar({ isHome, serverDetail }) {
   ):(
     <React.Fragment>
       {/* <CssBaseline /> */}
-      <AppBar sx={{left:"inherit",right:'inherit', top:"inherit",backgroundColor:'inherit'}}>
+      <AppBar sx={{left:"inherit",right:'inherit', position:'relative', height:'7vh' , top:"inherit",backgroundColor:'inherit'}}>
         <Toolbar>
           <Typography sx={{display:'flex',alignItems: 'center',gap:'0.5rem'}} variant="h6" component="div">
             <HashtagSvg color='#8F9296'/>
