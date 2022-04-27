@@ -27,7 +27,7 @@ export default function ServerNavbar({ isHome, serverDetail, toggleDrawer }) {
           backgroundColor: "inherit",
         }}
       >
-        <Toolbar>
+        <Toolbar className='serverNavbar-inside'>
           <Typography
             sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
             variant="h6"
@@ -65,7 +65,7 @@ export default function ServerNavbar({ isHome, serverDetail, toggleDrawer }) {
           backgroundColor: "inherit",
         }}
       >
-        <Toolbar>
+        <Toolbar className='serverNavbar-inside'>
           <Typography
             sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
             variant="h6"
