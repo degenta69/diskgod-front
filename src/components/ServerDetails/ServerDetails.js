@@ -245,7 +245,7 @@ const ServerDetails = () => {
           }}>
           <div
         style={{
-          background: !(data.Image === '')?`url(${data?.Image}) center center / contain no-repeat`:'',
+          background: !(data.Image === '')?`url(${data?.Image}) center center / cover no-repeat`:'',
           opacity: save ? "0.3" : "1",
           borderRadius:'50%',
           width:'35px',
