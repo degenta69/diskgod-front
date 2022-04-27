@@ -1,15 +1,18 @@
 import { io } from 'socket.io-client';
 import store from '../state/store';
 
+// const ENDPOINT = "no"
 const ENDPOINT = "https://diskgod.herokuapp.com/"
 
+// var socket = io(ENDPOINT);
 var socket = io.connect(ENDPOINT);
 
 var userInfoString = store.getState().userInfo.newUser
+console.log(JSON.parse(userInfoString))
 
-export const socketOpen = () => {
+export const socketOpen = (user) => {
     try {
-        let user = JSON.parse(userInfoString);
+        // let user = JSON.parse(userInfoString);
         socket.emit("setup", user);
         socket.on("connected", () => {
           console.log(user);

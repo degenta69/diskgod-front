@@ -53,7 +53,7 @@ const getElementByIdAsync = id => new Promise(resolve => {
     };
 
   return (
-    <Box className='overflow-scroll h-screen hideScrollbar'>
+    <Box sx={{height:'calc(100% - 12%)'}} className='overflow-scroll h-screen hideScrollbar'>
     <List className="overflow-x-auto hideScrollbar" sx={{ width: "100%",bgcolor: "transparent" }}>
       {data?.map((user, index) => {
         return (

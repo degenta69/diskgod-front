@@ -132,7 +132,6 @@ const SendMessageInput = ({
             placeholder={`Message ${serverDetail.chatName}`}
           />
           <input type="submit" className="hidden" placeholder="Search" />
-        </form>
         <div>
           {isTyping && (
             <div style={{display:'flex', alignItems:'flex-end'}}>
@@ -149,6 +148,7 @@ const SendMessageInput = ({
             </div>
           )}
         </div>
+        </form>
       </Box>
     </>
   );

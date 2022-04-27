@@ -9,14 +9,17 @@ import { useDispatch, useSelector } from "react-redux";
 import dayjs from "dayjs";
 import LocalizedFormat from "dayjs/plugin/localizedFormat";
 // import { textTransform } from "@mui/system";
-import ScrollableFeed from "react-scrollable-feed";
+// import ScrollableFeed from "react-scrollable-feed";
 import {
   getDateFormat
 } from "../../utils/messageUtils";
-import io from "socket.io-client";
+// import io from "socket.io-client";
 import { fetchMessagesByChatid } from "../../state/messageData/messageDataSlice";
 import socket, { socketOpen } from "../../socket/socketioLogic";
 // import {  } from "../../state/messageData/messageDataSlice";
+
+import Lottie from "lottie-react";
+import typingAnimationData from "../../animations/typing.json";
 dayjs.extend(LocalizedFormat);
 export const BlackTooltip = styled(({ className, ...props }) => (
   <Tooltip
@@ -65,12 +68,6 @@ const LoggedInUserChatingScreen = () => {
 
   var userInfo = useSelector((state) => state.userInfo);
   const [user, setuser] = useState({ _id: "" });
-  useEffect(() => {
-    let data = JSON.parse(userInfo.newUser);
-    setuser(data);
-    sendMessageInput.current.value = "";
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   var rerender = useSelector((state) => state.serverDetail.rerender);
   var serverInfo = useSelector((state) => state.serverDetail);
   const [socketConnected, setSocketConnected] = useState(false);
@@ -79,9 +76,11 @@ const LoggedInUserChatingScreen = () => {
   const [isTyping, setIsTyping] = useState(false);
 const [currentUserTyping , setCurrentUserTyping] = useState('');
   useEffect(() => {
-
+    let data = JSON.parse(userInfo.newUser);
+    setuser(data);
+    sendMessageInput.current.value = "";
     try {
-      socketOpen();
+      socketOpen(data);
       setSocketConnected(true);
     } catch (error) {
       console.log(error);
@@ -106,14 +105,14 @@ const [currentUserTyping , setCurrentUserTyping] = useState('');
 
   useEffect(() => {
     let serverDetail = JSON.parse(serverInfo.newState);
-    scrollToBottom();
     
     console.log("hi i rendered");
-    dispatch(fetchMessagesByChatid(serverDetail._id));
-
+    
     selectedChatCompare = serverDetail;
     socket.emit("join room", serverDetail._id);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    dispatch(fetchMessagesByChatid(serverDetail._id));
+    scrollToBottom();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rerender, serverInfo.newState]);
 
   useEffect(() => {
@@ -123,11 +122,16 @@ const [currentUserTyping , setCurrentUserTyping] = useState('');
         };
         dispatch(fetchMessagesByChatid(newMessageRecieved.chat._id));
       });
+      return () => {
+        socket.on("disconnect");
+        // console.log("disconnect");
+      };
+
   });
 
   return (
     <>
-      <Box className="hideScrollbar chat-box-wrapper ">
+      <Box className="hideScrollbar overflow-scroll chat-box-wrapper ">
         {/* <ScrollableFeed className="h-full hideScrollbar"> */}
           {messages.map((message, i) => (
             <React.Fragment key={`chat-box-fragment-${i}`}>
@@ -174,7 +178,7 @@ const [currentUserTyping , setCurrentUserTyping] = useState('');
             </React.Fragment>
           ))}
           {loading && (
-            <React.Fragment key={`chat-box-fragment-${390234842018458320}`}>
+            <React.Fragment key={`chat-box-fragment-${390234842018458320n}`}>
               <Box className="chat-box-spacing">
                 <Box className="chat-box">
                   {
@@ -194,7 +198,7 @@ const [currentUserTyping , setCurrentUserTyping] = useState('');
                   {
                     <Box className="chat-box-header">
                       <Box className="chat-box-sender-name">
-                        <p>{user.name}</p>
+                      Wait Please...
                       </Box>
                       <BlackTooltip
                         date
@@ -213,7 +217,13 @@ const [currentUserTyping , setCurrentUserTyping] = useState('');
                       style={{ color: "#6d6d6e" }}
                       className="chat-box-content"
                     >
-                      <p>{sendMessageInput.current?.value}</p>
+                      <Lottie
+                style={{ width: "50px" }}
+                loop
+                autoPlay
+                animationData={typingAnimationData}
+              />
+                      {/* <p>{sendMessageInput.current?.value}</p> */}
                     </Box>
                   }
                 </Box>

@@ -28,7 +28,7 @@
   right: 0;
   right: inherit;
   width: calc(100vw - 10vw);
-  height: 6rem;
+  margin-bottom: 1rem;
 }
 .sendMessageIcon:hover {
 color: #f9f3ff;

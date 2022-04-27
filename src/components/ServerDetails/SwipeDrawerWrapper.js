@@ -1,7 +1,7 @@
-import * as React from 'react';
+import * as React from "react";
 // import Box from '@mui/material/Box';
-import SwipeableDrawer from '@mui/material/SwipeableDrawer';
-import Button from '@mui/material/Button';
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import Button from "@mui/material/Button";
 // import List from '@mui/material/List';
 // import Divider from '@mui/material/Divider';
 // import ListItem from '@mui/material/ListItem';
@@ -9,75 +9,43 @@ import Button from '@mui/material/Button';
 // import ListItemText from '@mui/material/ListItemText';
 // import InboxIcon from '@mui/icons-material/MoveToInbox';
 // import MailIcon from '@mui/icons-material/Mail';
-import ServerDetails from './ServerDetails';
-import SwipeRightAltIcon from '@mui/icons-material/SwipeRightAlt';
+import ServerDetails from "./ServerDetails";
+import SwipeRightAltIcon from "@mui/icons-material/SwipeRightAlt";
+import { useDispatch, useSelector } from "react-redux";
+import { setmuiModalBool } from "../../state/muiModalState/muiModalState";
+import { Backdrop } from "@material-ui/core";
 
-export default function SwipeableTemporaryDrawer() {
-  const [state, setState] = React.useState({
-    left: false,
+export default function SwipeableTemporaryDrawer({ toggleDrawer, state }) {
+  const open = useSelector((state) => state.muiModalShow.value);
 
-  });
-
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (
-      event &&    
-      event.type === 'keydown' &&
-      (event.key === 'Tab' || event.key === 'Shift')
-    ) {
-      return;
-    }
-
-    setState({ ...state, [anchor]: open });
+  const dispatch = useDispatch();
+  const handleClose = () => {
+    dispatch(setmuiModalBool(false));
+  };
+  const handleOpen = () => {
+    dispatch(setmuiModalBool(true));
   };
 
-//   const list = (anchor) => (
-//     <Box
-//       sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250 }}
-//       role="presentation"
-//       onClick={toggleDrawer(anchor, false)}
-//       onKeyDown={toggleDrawer(anchor, false)}
-//     >
-//       <List>
-//         {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-//           <ListItem button key={text}>
-//             <ListItemIcon>
-//               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-//             </ListItemIcon>
-//             <ListItemText primary={text} />
-//           </ListItem>
-//         ))}
-//       </List>
-//       <Divider />
-//       <List>
-//         {['All mail', 'Trash', 'Spam'].map((text, index) => (
-//           <ListItem button key={text}>
-//             <ListItemIcon>
-//               {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-//             </ListItemIcon>
-//             <ListItemText primary={text} />
-//           </ListItem>
-//         ))}
-//       </List>
-//     </Box>
-//   );
-
   return (
-    <div>
-      {['right'].map((anchor) => (
-        <React.Fragment key={anchor}>
-          <SwipeRightAltIcon onClick={toggleDrawer(anchor, true)}/>
-          {/* <Button >{anchor}</Button> */}
-          <SwipeableDrawer
-          className='bg-serverBG '
-            anchor={anchor}
-            open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
-            onOpen={toggleDrawer(anchor, true)}
-          >
-            <ServerDetails/>
-          </SwipeableDrawer>
-        </React.Fragment>
-      ))}
-    </div>
+    <>
+      <SwipeableDrawer
+        className="bg-serverBG "
+        anchor={"right"}
+        open={open}
+        onClose={handleClose}
+        onOpen={handleOpen}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+        sx={{
+          width: "0vh",
+          
+        }}
+      >
+        <ServerDetails />
+      </SwipeableDrawer>
+    </>
   );
 }

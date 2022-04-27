@@ -16,8 +16,8 @@
 
 .css-1t29gy6-MuiToolbar-root{
   height:100% !important;
+  min-height: 0 !important;
 }
-
 
 .inner-2pOSmK {
   position: relative;

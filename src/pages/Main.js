@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import AddGroupChatModal from '../components/AddGroupChatModal/AddGroupChatModal'
 import HomeScreen from '../components/HomeScreen/HomeScreen'
 import SideBar from '../components/SideBar/SideBar'
-
+import "../App.css"
 const Main = () => {
   const isMobile = useMediaQuery({ maxWidth: 900 })
   const nav = useNavigate()
