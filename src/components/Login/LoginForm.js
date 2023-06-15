@@ -27,23 +27,23 @@ const LoginForm = () => {
     const loginReq = await axios
       .post(`/api/user/login`, userInfo)
       .catch((err) => {
-        // console.log(err);
-        if(err.toString().indexOf('401')>-1){
-          return setError("Invalid Credentials ");
+        console.log(err.response);
+        if(err.response.status.toString().indexOf('401')>-1){
+          return setError(err.response.data?err.response.data:"Invalid Credentials ");
         }
-        if(err.toString().indexOf('500')>-1){
-          return setError("try again later");
+        if(err.response.status.toString().indexOf('500')>-1){
+          return setError(err.response.data?err.response.data:"try again later");
         }
-        if(err.toString().indexOf('400')>-1){
-          return setError("Invalid Credentials ");
+        if(err.response.status.toString().indexOf('400')>-1){
+          return setError(err.response.data?err.response.data:"Invalid Credentials ");
 
         }
-        if(err.toString().indexOf('404')>-1){
-          return setError("No user found");
+        if(err.response.status.toString().indexOf('404')>-1){
+          return setError(err.response.data?err.response.data:"No user found");
 
         }
-        if(err.toString().indexOf('408')>-1){
-          return setError("try again later"); 
+        if(err.response.status.toString().indexOf('408')>-1){
+          return setError(err.response.data?err.response.data:"try again later"); 
 
         }
       });
