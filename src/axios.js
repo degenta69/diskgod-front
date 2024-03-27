@@ -2,7 +2,7 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import dayjs from 'dayjs'
 
-axios.defaults.baseURL = `https://diskgod.herokuapp.com`
+axios.defaults.baseURL = `http://localhost:6453`
 
 // axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'http://localhost:3000';
 
@@ -11,7 +11,7 @@ var authTokens = localStorage.getItem('diskGodUserToken')
   : null
 
 const instance = axios.create({
-  baseURL: `https://diskgod.herokuapp.com`,
+  baseURL: `http://localhost:6453`,
   headers: {
     Authorization: `Bearer ${authTokens?.access}`
   },
