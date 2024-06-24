@@ -2,7 +2,7 @@ import { io } from 'socket.io-client';
 import store from '../state/store';
 
 // const ENDPOINT = "no"
-const ENDPOINT = "https://diskgod.herokuapp.com/"
+const ENDPOINT = "http://localhost:6453/"
 
 // var socket = io(ENDPOINT);
 var socket = io.connect(ENDPOINT);
