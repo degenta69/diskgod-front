@@ -4,27 +4,27 @@ const initialState = {
   value: false,
 };
 
-export const modalShowSlice = createSlice({
-  name: "counter",
+export const muiModalState = createSlice({
+  name: "muiModalState",
   initialState,
   reducers: {
-    toggleModal: (state) => {
+    togglemuiModal: (state) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
       state.value = !state.value;
     },
-    setOpen: (state) => {
+    setmuiOpen: (state) => {
       state.value = true;
     },
-    setModalBool: (state, action) => {
+    setmuiModalBool: (state, action) => {
       state.value = action.payload;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { toggleModal, setOpen, setModalBool } = modalShowSlice.actions;
+export const { togglemuiModal, setmuiOpen, setmuiModalBool } = muiModalState.actions;
 
-export default modalShowSlice.reducer;
+export default muiModalState.reducer;

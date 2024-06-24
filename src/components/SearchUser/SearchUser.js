@@ -30,7 +30,7 @@ const SearchUser = () => {
     }, [searchQuery]);
   return (
     <>
-    <Box>
+    <Box sx={{height:'7%'}}>
     <div className="searchBar-2aylmZ container-2oNtJn medium-2NClDM">
       <div className="inner-2pOSmK">
         <input

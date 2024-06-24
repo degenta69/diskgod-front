@@ -1,15 +1,18 @@
-
-html, body, #root{
-  @apply h-full
+html,
+body,
+#root {
+  @apply h-full;
 }
-
+*::-webkit-scrollbar {
+  display: none;
+}
 .hideScrollbar::-webkit-scrollbar {
   display: none;
 }
 .hideScrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
-.w-35{
+.w-35 {
   width: 35%;
 }

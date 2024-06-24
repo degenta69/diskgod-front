@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addUser } from "../../state/userInfoData/userInfoSlice";
 
@@ -18,7 +18,7 @@ const LoginForm = () => {
     });
   };
   const dispatch = useDispatch()
-  const userDetails = useSelector(state => state.userInfo)
+  // const userDetails = useSelector(state => state.userInfo)
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (userInfo.email === "" || userInfo.password === "") {
@@ -27,23 +27,23 @@ const LoginForm = () => {
     const loginReq = await axios
       .post(`/api/user/login`, userInfo)
       .catch((err) => {
-        // console.log(err);
-        if(err.toString().indexOf('401')>-1){
-          return setError("Invalid Credentials ");
+        console.log(err.response);
+        if(err.response.status.toString().indexOf('401')>-1){
+          return setError(err.response.data?err.response.data:"Invalid Credentials ");
         }
-        if(err.toString().indexOf('500')>-1){
-          return setError("try again later");
+        if(err.response.status.toString().indexOf('500')>-1){
+          return setError(err.response.data?err.response.data:"try again later");
         }
-        if(err.toString().indexOf('400')>-1){
-          return setError("Invalid Credentials ");
+        if(err.response.status.toString().indexOf('400')>-1){
+          return setError(err.response.data?err.response.data:"Invalid Credentials ");
 
         }
-        if(err.toString().indexOf('404')>-1){
-          return setError("No user found");
+        if(err.response.status.toString().indexOf('404')>-1){
+          return setError(err.response.data?err.response.data:"No user found");
 
         }
-        if(err.toString().indexOf('408')>-1){
-          return setError("try again later"); 
+        if(err.response.status.toString().indexOf('408')>-1){
+          return setError(err.response.data?err.response.data:"try again later"); 
 
         }
       });

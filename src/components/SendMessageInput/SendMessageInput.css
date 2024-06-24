@@ -12,8 +12,8 @@
 }
 .sendMessageFormWrapper {
   position: relative;
-  width: 71%;
-  position: fixed;
+  /* width: 71%; */
+  /* position: fixed; */
   bottom: 0;
   left: inherit;
   right: 0;
@@ -22,7 +22,13 @@
 }
 
 .sendMessageFormWrapper form {
-  position: relative;
+  position: fixed;
+  bottom: 0;
+  left: inherit;
+  right: 0;
+  right: inherit;
+  width: calc(100vw - 10vw);
+  margin-bottom: 1rem;
 }
 .sendMessageIcon:hover {
 color: #f9f3ff;
@@ -37,6 +43,6 @@ color: #f9f3ff;
 
 @media (max-width: 900px) {
   .sendMessageFormWrapper {
-    width: 65%;
+    /* width: 65%; */
   }
 }

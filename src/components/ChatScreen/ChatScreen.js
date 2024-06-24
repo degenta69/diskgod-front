@@ -13,6 +13,7 @@ const ChatScreen = () => {
   useEffect(() => {
    let data = JSON.parse(serverDetails.newState)
     setNewServerDetail(data)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverDetails.render]);
 
   // console.log(serverDetails, 'serverDetails');
@@ -20,7 +21,7 @@ const ChatScreen = () => {
     <>
     
     <ServerNavbar isHome/>
-    <Box sx={{marginTop:'5.5rem'}} className="searchUserWrapper m-6">
+    <Box sx={{height:'calc(100vh - 7vh)'}} className="searchUserWrapper m-6">
     <SearchUser/>
     </Box>
     </>
@@ -29,7 +30,7 @@ const ChatScreen = () => {
     
     <ServerNavbar serverDetail={JSON.parse(serverDetails.newState)}/>
     
-    <Box sx={{marginTop:'3.5rem',overflow:'hidden',maxHeight:'100%'}} className="  ">
+    <Box sx={{height: 'calc(100vh - 7vh)',overflow:'hidden',maxHeight:'100%'}} className="  ">
     <LoggedInUserChatingScreen serverDetail={newServerDetail}/>
     </Box>
     </>

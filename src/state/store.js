@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import modalShowReducer from './counter/modalShowSlice'
+import muiModalShowReducer from './muiModalState/muiModalState'
 import serverDetailReducer from './serverDetailData/serverDetailSlice'
 import messageDetailReducer from './messageData/messageDataSlice'
 import userInfoReducer from './userInfoData/userInfoSlice'
@@ -20,6 +21,7 @@ import {
 
 const rootReducer = combineReducers({
   modalShow: modalShowReducer,
+  muiModalShow: muiModalShowReducer,
   serverDetail: serverDetailReducer,
   userInfo:  userInfoReducer,
   messageDetail: messageDetailReducer,
