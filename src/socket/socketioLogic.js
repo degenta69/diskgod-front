@@ -2,7 +2,7 @@ import { io } from 'socket.io-client';
 import store from '../state/store';
 
 // const ENDPOINT = "no"
-const ENDPOINT = "http://localhost:6453/"
+const ENDPOINT = process.env.REACT_APP_BASE_URL
 
 // var socket = io(ENDPOINT);
 var socket = io.connect(ENDPOINT);
