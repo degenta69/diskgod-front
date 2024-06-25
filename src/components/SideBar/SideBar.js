@@ -5,7 +5,7 @@ import ServerListings from "../ServerListings/ServerListings";
 import "./SideBar.css";
 
 import { addHomeDetail } from "../../state/serverDetailData/serverDetailSlice";
-import instance from "../../axios";
+import instance from "../../api/axios";
 import { setOpen } from "../../state/counter/modalShowSlice";
 
 const SideBar = () => {

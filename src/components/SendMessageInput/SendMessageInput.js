@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Box } from "@material-ui/core";
 import "./SendMessageInput.css";
 import SendIcon from "@mui/icons-material/Send";
-import instance from "../../axios";
+import instance from "../../api/axios";
 import { addRerender } from "../../state/serverDetailData/serverDetailSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchMessagesByChatid } from "../../state/messageData/messageDataSlice";

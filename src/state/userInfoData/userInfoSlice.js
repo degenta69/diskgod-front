@@ -10,7 +10,12 @@ const initialState = {
     profilepic: "",
     dob: "",
   },
-newUser:"{\"name\":\"\",\"email\":\"\",\"id\":\"\",\"dob\":\"\"}",
+  newUser: {
+    name: "",
+    email: "",
+    id: "",
+    dob: "",
+  },
   token: "",
 };
 
@@ -27,12 +32,7 @@ export const userInfoSlice = createSlice({
     },
     addUser: (state, action) => {
 
-      const userString = JSON.stringify(action.payload);
-      // console.log(action.payload, ' userString', state.newUser)
-
-      // state.newUser = newUser;
-
-      return { ...state, newUser: userString };
+      state.newUser = action.payload;;
     },
     // addHomeDetail: (state, action) => {
     //   state.userName = action.payload.userName;

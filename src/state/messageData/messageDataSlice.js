@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import instance from "../../axios";
+import instance from "../../api/axios";
 // First, create the thunk
 export const fetchMessagesByChatid = createAsyncThunk(
   "message/fetchMessageStatus",

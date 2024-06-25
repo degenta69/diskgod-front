@@ -76,7 +76,7 @@ const LoggedInUserChatingScreen = () => {
   const [isTyping, setIsTyping] = useState(false);
 const [currentUserTyping , setCurrentUserTyping] = useState('');
   useEffect(() => {
-    let data = JSON.parse(userInfo.newUser);
+    let data = userInfo.newUser;
     setuser(data);
     sendMessageInput.current.value = "";
     try {

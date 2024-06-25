@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
+import instance from "../../api/axios";
 
 const SignUp = () => {
   const nav = useNavigate()
@@ -24,6 +25,11 @@ const SignUp = () => {
     const loginReq = await axios.post(`/api/user/signup`, userInfo);
     // console.log(loginReq);
     localStorage.setItem("diskGodUserToken", JSON.stringify({access:loginReq.data.token}));
+    instance({
+      headers:{
+        Authorization: `Bearer ${loginReq.data.token}`
+      }
+    })
     if (loginReq.status === 200) {
       window.location.reload();
       nav("/home");

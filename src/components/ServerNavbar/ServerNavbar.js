@@ -8,7 +8,6 @@ import InfoIcon from "@mui/icons-material/Info";
 import { setmuiOpen } from "../../state/muiModalState/muiModalState";
 export default function ServerNavbar({ isHome, serverDetail, toggleDrawer }) {
   var userDetail = useSelector((state) => state.userInfo.newUser);
-  userDetail = JSON.parse(userDetail);
   const dispatch = useDispatch();
   // React.useEffect(() => {
   // }, []);

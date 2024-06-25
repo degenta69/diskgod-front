@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import UserList from './userList';
-import instance from '../../axios'
+import instance from '../../api/axios'
 
 const SearchUser = () => {
     

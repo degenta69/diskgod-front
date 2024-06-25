@@ -28,7 +28,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 import { useMediaQuery } from "react-responsive";
 import { isUserGroupAdmin } from "../../utils/isUserGroupAdmin";
-import instance from "../../axios";
+import instance from "../../api/axios";
 import axios from "axios";
 import uploadImageToCloud from "../../utils/uploadImageToCloud";
 import { setmuiModalBool } from "../../state/muiModalState/muiModalState";
@@ -48,12 +48,12 @@ const ServerDetails = () => {
   useEffect(() => {
     if (!serverDetails.isHome) {
       let data = JSON.parse(serverDetails.newState);
-      let userdata = JSON.parse(userDetail.newUser);
+      let userdata = userDetail.newUser;
       setuser(userdata);
       //   console.log('hello',data)
       setdata(data);
     } else {
-      let data = JSON.parse(userDetail.newUser);
+      let data = userDetail.newUser;
       console.log("hello", data);
       // console.log(data);
       if (data.id) {

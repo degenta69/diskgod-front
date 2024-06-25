@@ -7,11 +7,24 @@ import Typography from "@mui/material/Typography";
 import { useDispatch, useSelector } from "react-redux";
 import { setModalBool } from "../../state/counter/modalShowSlice";
 import FileInput from "../../SVG/FileInput";
-import { Avatar, Checkbox, Chip, List, ListItem, ListItemAvatar, ListItemButton, ListItemText, TextField } from "@mui/material";
-import instance from "../../axios";
+import {
+  Avatar,
+  Checkbox,
+  Chip,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemButton,
+  ListItemText,
+  TextField,
+} from "@mui/material";
+import instance from "../../api/axios";
 import uploadImageToCloud from "../../utils/uploadImageToCloud";
 import { addRerender } from "../../state/serverDetailData/serverDetailSlice";
 import AlertModal from "../AlertModal/AlertModal";
+import { ApiRequestHandler } from "../../api/apiRepositery";
+import UrlPaths from "../../Models/UrlPaths";
+import ApiMethods from "../../Models/ApiMethods";
 
 const style = {
   position: "absolute",
@@ -28,32 +41,47 @@ const style = {
 };
 
 export default function AddGroupChatModal() {
-    const  [searchQuery , setSearchQuery] = React.useState({search:''});
-    const  [searchResult , setSearchResult] = React.useState([]);
-    const  [groupinfo , setgroupinfo] = React.useState({Image:'',chatName:'',image_secure_url:''});
-    const [openAlert, setOpenAlert] = React.useState(false);
-    const [alertMsg, setAlertMsg] = React.useState({status:'',msg:''});
-    React.useEffect(() => {
-        const getUserSearch =async()=>{
-            const res = await instance.get('api/user?search='+searchQuery.search)
-            setSearchResult(res.data)
-            if(res.data.length>0){
-                // setIsLoading(false)
-                
-             }else{
-                //  setIsLoading(true)
-                //  setSearchResult([{one:1},{two:2},{three:3},{four:4},{five:5},{six:6},{seven:7},{eight:8},{nine:9},{ten:10}])
-             }
-             // console.log(searchResult)
-         }
-         // setIsLoading(false)
-         getUserSearch() 
-         return () => {
-            //  setIsLoading(true)
-             setSearchResult([])
-         }
-     }, [searchQuery]);
-     
+  const [searchQuery, setSearchQuery] = React.useState({ search: "" });
+  const [searchResult, setSearchResult] = React.useState([]);
+  const [groupinfo, setgroupinfo] = React.useState({
+    Image: "",
+    chatName: "",
+    image_secure_url: "",
+  });
+  const [openAlert, setOpenAlert] = React.useState(false);
+  const [alertMsg, setAlertMsg] = React.useState({ status: "", msg: "" });
+  const GetUsers = async()=>{
+    const successCb = (res)=>{
+      setSearchResult(res.data)
+    }
+    const errorCb = (error)=>{
+      setOpenAlert(true);
+      setAlertMsg({
+        status: "error",
+        msg: error.data
+          ? error.data.message
+            ? error.data.message
+            : error.data
+          : "Something went wrong",
+      });
+    }
+
+    await ApiRequestHandler(
+      UrlPaths.SEARCH_USER.replace("?queryData",searchQuery.search ?? ""),
+      ApiMethods.GET,
+      null,
+      successCb,
+      errorCb
+    )
+  } 
+  React.useEffect(() => {
+    (async () => await GetUsers())();
+    return () => {
+      //  setIsLoading(true)
+      setSearchResult([]);
+    };
+  }, [searchQuery]);
+
   const open = useSelector((state) => state.modalShow.value);
   const dispatch = useDispatch();
   const handleClose = () => {
@@ -62,24 +90,22 @@ export default function AddGroupChatModal() {
 
   const [page, setpage] = React.useState({ current: false, next: false });
 
-  
   const [checked, setChecked] = React.useState([]);
 
   const handleToggle = (value) => () => {
     const currentIndex = checked.reduce((acc, curr, index) => {
-        if (curr._id === value._id) {
-            acc.push(index);
-        }
-        return acc;
-    },[]);
+      if (curr._id === value._id) {
+        acc.push(index);
+      }
+      return acc;
+    }, []);
 
-    
     const newChecked = [...checked];
 
     if (currentIndex.length === 0) {
       newChecked.push(value);
     } else {
-        newChecked.splice(currentIndex, 1);
+      newChecked.splice(currentIndex, 1);
     }
     // console.log(currentIndex, 'new', newChecked)
 
@@ -87,31 +113,48 @@ export default function AddGroupChatModal() {
   };
 
   const handleDelete = (index) => {
-      const currentIndex = checked.findIndex((curr) => curr._id === index);
-        const newChecked = [...checked];
-        newChecked.splice(currentIndex, 1);
-        setChecked(newChecked);
-  }
-  
+    const currentIndex = checked.findIndex((curr) => curr._id === index);
+    const newChecked = [...checked];
+    newChecked.splice(currentIndex, 1);
+    setChecked(newChecked);
+  };
+
   const handleMakeGroupChat = async () => {
     let users = checked.map((user) => user._id);
     const data = {
-        users: users,
-        chatName: groupinfo.chatName,
-        Image: groupinfo.image_secure_url?groupinfo.image_secure_url:'',
+      users: users,
+      chatName: groupinfo.chatName,
+      Image: groupinfo.image_secure_url ? groupinfo.image_secure_url : "",
     };
-    // console.log(groupinfo)
-    try {
-      const res = await instance.post("api/chats/group", data);
-      console.log(res)
-      setOpenAlert(true)
-        setAlertMsg({status:'success',msg:'Group Chat Created Successfully'})
-      
-      dispatch(addRerender({}))
-    } catch (error) {
-        setOpenAlert(true)
-        setAlertMsg({status:'error',msg:error.response?.data?error.response?.data:'Something went wrong'})
-    }
+    let successCb = (res) => {
+      console.log(res);
+      setOpenAlert(true);
+      setAlertMsg({
+        status: "success",
+        msg: "Group Chat Created Successfully",
+      });
+
+      dispatch(addRerender({}));
+    };
+    let errorCb = (error) => {
+      console.log(error);
+      setOpenAlert(true);
+      setAlertMsg({
+        status: "error",
+        msg: error.data
+          ? error.data.message
+            ? error.data.message
+            : error.data
+          : "Something went wrong",
+      });
+    };
+    await ApiRequestHandler(
+      UrlPaths.GROUP_CHAT,
+      ApiMethods.POST,
+      data,
+      successCb,
+      errorCb
+    );
   };
   return (
     <div>
@@ -143,7 +186,8 @@ export default function AddGroupChatModal() {
                 id="transition-modal-description"
                 sx={{ mt: 2, fontSize: "12px" }}
               >
-                Give your new server a personality with a name and an icon. You can always change it later.
+                Give your new server a personality with a name and an icon. You
+                can always change it later.
               </Typography>
               <Box className="relative flex my-6">
                 <FileInput />
@@ -151,7 +195,7 @@ export default function AddGroupChatModal() {
                   type="file"
                   onChange={(e) => {
                     setgroupinfo({ ...groupinfo, Image: e.target.files[0] });
-                    }}
+                  }}
                   id="groupChatIconInput"
                   style={{
                     right: 0,
@@ -168,7 +212,7 @@ export default function AddGroupChatModal() {
                   className="w-full hover:border-0"
                   onChange={(e) => {
                     setgroupinfo({ ...groupinfo, chatName: e.target.value });
-                    }}
+                  }}
                   sx={{
                     backgroundColor: "#E2E4E8",
 
@@ -190,12 +234,21 @@ export default function AddGroupChatModal() {
               </Box>
               <Box className="flex mt-4 justify-end">
                 <button
-                  onClick={async() => {
+                  onClick={async () => {
                     setpage({ current: !page.current, next: !page.next });
-                    const url = await uploadImageToCloud(groupinfo.Image)
-                     setgroupinfo({...groupinfo, image_secure_url: url });
+                    const url = await uploadImageToCloud(groupinfo.Image);
+                    setgroupinfo({ ...groupinfo, image_secure_url: url });
                   }}
-                  style={{paddingTop: '0.5rem',paddingBottom: '0.5rem', paddingLeft: '1rem', paddingRight: '1rem',marginTop:'1rem' ,transition:'all 0.3s ease-in-out' ,borderRadius:'8px' ,cursor: 'pointer'}}
+                  style={{
+                    paddingTop: "0.5rem",
+                    paddingBottom: "0.5rem",
+                    paddingLeft: "1rem",
+                    paddingRight: "1rem",
+                    marginTop: "1rem",
+                    transition: "all 0.3s ease-in-out",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                  }}
                   className="text-white bg-blue-500 hover:bg-blue-700 py-2 px-4 transition-all ease-in-out duration-500 rounded-lg"
                 >
                   next
@@ -212,8 +265,10 @@ export default function AddGroupChatModal() {
                       <Chip
                         color="success"
                         size="small"
-                        label={item.name} 
-                        onDelete={()=>{handleDelete(item._id)}}
+                        label={item.name}
+                        onDelete={() => {
+                          handleDelete(item._id);
+                        }}
                         avatar={<Avatar src={item.profilepic} />}
                       />
                     );
@@ -268,7 +323,11 @@ export default function AddGroupChatModal() {
                         <Checkbox
                           edge="end"
                           onChange={handleToggle(value)}
-                          checked={checked.findIndex(obj=>{return obj._id === value._id}) !== -1}
+                          checked={
+                            checked.findIndex((obj) => {
+                              return obj._id === value._id;
+                            }) !== -1
+                          }
                           inputProps={{ "aria-labelledby": labelId }}
                         />
                       }
@@ -277,7 +336,11 @@ export default function AddGroupChatModal() {
                       <ListItemButton>
                         <ListItemAvatar>
                           <Avatar
-                          sx={{objectFit: 'contain', width: '40px', height: '40px',}}
+                            sx={{
+                              objectFit: "contain",
+                              width: "40px",
+                              height: "40px",
+                            }}
                             alt={`Avatar n°${value + 1}`}
                             src={value.profilepic}
                           />
@@ -296,20 +359,41 @@ export default function AddGroupChatModal() {
                   onClick={() => {
                     setpage({ current: !page.current, next: !page.next });
                   }}
-                  style={{paddingTop: '0.5rem',paddingBottom: '0.5rem', paddingLeft: '1rem', paddingRight: '1rem',marginTop:'1rem' ,transition:'all 0.3s ease-in-out' ,borderRadius:'8px' ,cursor: 'pointer'}}
+                  style={{
+                    paddingTop: "0.5rem",
+                    paddingBottom: "0.5rem",
+                    paddingLeft: "1rem",
+                    paddingRight: "1rem",
+                    marginTop: "1rem",
+                    transition: "all 0.3s ease-in-out",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                  }}
                   className="text-white bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded-md"
                 >
                   prev
                 </button>
                 <button
                   onClick={handleMakeGroupChat}
-                  style={{paddingTop: '0.5rem',paddingBottom: '0.5rem', paddingLeft: '1rem', paddingRight: '1rem',marginTop:'1rem' ,transition:'all 0.3s ease-in-out' ,borderRadius:'8px' ,cursor: 'pointer'}}
+                  style={{
+                    paddingTop: "0.5rem",
+                    paddingBottom: "0.5rem",
+                    paddingLeft: "1rem",
+                    paddingRight: "1rem",
+                    marginTop: "1rem",
+                    transition: "all 0.3s ease-in-out",
+                    borderRadius: "8px",
+                    cursor: "pointer",
+                  }}
                   className="text-white bg-blue-500 hover:bg-blue-700 py-2 px-4 rounded-md"
                 >
                   Make a Group Chat
                 </button>
-            <AlertModal open={openAlert} setOpen={setOpenAlert} msg={alertMsg}/>
-
+                <AlertModal
+                  open={openAlert}
+                  setOpen={setOpenAlert}
+                  msg={alertMsg}
+                />
               </Box>
             </Box>
           </Fade>

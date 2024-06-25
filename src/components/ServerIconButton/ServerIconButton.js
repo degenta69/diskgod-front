@@ -43,7 +43,7 @@ const loggedInUser = useSelector((state) => state.userInfo.newUser);
   const findNameOfUserNotLoggedIn = (user) => {
     if(user){
 
-      const loggedinuser = {...JSON.parse(loggedInUser)}
+      const loggedinuser = {...loggedInUser}
       // const index = user?.findIndex((use) => use._id === loggedinuser._id);
       // user?.splice(1, index);
       // console.log(user)

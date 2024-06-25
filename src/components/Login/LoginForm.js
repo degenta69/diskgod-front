@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { addUser } from "../../state/userInfoData/userInfoSlice";
+import instance from "../../api/axios";
 
 const LoginForm = () => {
   const nav = useNavigate();
@@ -54,6 +55,11 @@ const LoginForm = () => {
         "diskGodUserToken",
         JSON.stringify({ access: loginReq.data.token })
       );
+      instance({
+        headers:{
+          Authorization: `Bearer ${loginReq.data.token}`
+        }
+      })
       nav("/home");
       window.location.reload();
       setError(null);

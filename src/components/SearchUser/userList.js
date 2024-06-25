@@ -12,7 +12,7 @@ import { Stack } from "@mui/material";
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Box } from "@mui/system";
-import instance from "../../axios";
+import instance from "../../api/axios";
 import { useDispatch } from "react-redux";
 import { addRerender } from "../../state/serverDetailData/serverDetailSlice";
 
