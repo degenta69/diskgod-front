@@ -38,7 +38,7 @@ const BlackTooltip = styled(({ className, ...props }) => (
 
 const ServerIconButton = ({ show, usersNumber, profile, data, serverNumber, add, onClick }) => {
   const isMobile = useMediaQuery({ maxWidth: 900 });
-const loggedInUser = useSelector((state) => state.userInfo.newUser);
+const loggedInUser = useSelector((state) => state.userInfo.userState);
 
   const findNameOfUserNotLoggedIn = (user) => {
     if(user){

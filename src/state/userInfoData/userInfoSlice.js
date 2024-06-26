@@ -1,23 +1,29 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import instance from "../../api/axios";
+import UrlPaths from "../../Models/UrlPaths";
 
 const initialState = {
-  user: {
-    _id: "",
-    name: "",
-    email: "",
-    createdAt: "",
-    updatedAt: "",
-    profilepic: "",
-    dob: "",
-  },
-  newUser: {
-    name: "",
-    email: "",
-    id: "",
-    dob: "",
-  },
+  userState:null,
   token: "",
 };
+
+// Async thunk to fetch user info
+export const fetchUserInfo = createAsyncThunk(
+  'userInfo/fetchUserInfo',
+  async (token, { rejectWithValue }) => {
+    try {
+      console.log(token)
+      const response = await instance.get(UrlPaths.GET_USER, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 export const userInfoSlice = createSlice({
   name: "userInfo",
@@ -31,25 +37,19 @@ export const userInfoSlice = createSlice({
       return state;
     },
     addUser: (state, action) => {
+      
 
-      state.newUser = action.payload;;
+      state.userState = action.payload;;
     },
-    // addHomeDetail: (state, action) => {
-    //   state.userName = action.payload.userName;
-    //   state.userEmail = action.payload.userEmail;
-    //   state.userId = action.payload.userId;
-    //   state.userAvatar = action.payload.userAvatar;
-    //   state.userStatus = action.payload.userStatus;
-    //   state.userStatusMessage = action.payload.userStatusMessage;
-    //   state.isHome = true;
-    //   return { ...state };
-    // },
-    // decrement: (state) => {
-    //   state.value -= 1
-    // },
-    // incrementByAmount: (state, action) => {
-    //   state.value += action.payload
-    // },
+    extraReducers: (builder) => {
+      builder.addCase(fetchUserInfo.fulfilled, (state, action) => {
+        console.log(state,action)
+        return action.payload;
+      });
+      builder.addCase(fetchUserInfo.rejected, (state, action) => {
+        // Handle error state if needed
+      });
+    },
   },
 });
 

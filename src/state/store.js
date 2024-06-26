@@ -3,7 +3,7 @@ import modalShowReducer from './counter/modalShowSlice'
 import muiModalShowReducer from './muiModalState/muiModalState'
 import serverDetailReducer from './serverDetailData/serverDetailSlice'
 import messageDetailReducer from './messageData/messageDataSlice'
-import userInfoReducer from './userInfoData/userInfoSlice'
+import userInfoReducer, { fetchUserInfo } from './userInfoData/userInfoSlice'
 
 // redux-persist
 import storage from 'redux-persist/lib/storage';
@@ -53,4 +53,11 @@ const store = configureStore({
 })
 
 export const persistor = persistStore(store);
+
+// Check if userInfo is null and token is available in localStorage
+const token = localStorage.getItem('diskGodUserToken');
+if (token) {
+  store.dispatch(fetchUserInfo("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2Njc5OTcwMmIwMTY3MTk5NzdmMzU0YmUiLCJpYXQiOjE3MTk0MjYzMTIsImV4cCI6MTcyMDAzMTExMn0.5wZW2Z-GnOiBkSs-YgsDzhWimHfCWYdhaiFujEfn5Uc"));
+}
+
 export default store;

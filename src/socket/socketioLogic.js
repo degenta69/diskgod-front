@@ -7,8 +7,8 @@ const ENDPOINT = process.env.REACT_APP_BASE_URL
 // var socket = io(ENDPOINT);
 var socket = io.connect(ENDPOINT);
 
-var userInfoString = store.getState().userInfo.newUser
-console.log(userInfoString)
+// var userInfoString = store.getState().userInfo.userState
+// console.log(userInfoString)
 
 export const socketOpen = (user) => {
     try {

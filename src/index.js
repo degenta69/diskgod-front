@@ -11,7 +11,7 @@ import AuthPage from "./pages/AuthPage";
 import SignUp from "./components/SignUp/SignUp";
 // import Loader from "./components/Loader/Loader";
 import Login from "./components/Login/Login";
-// import App from "./App";
+import App from "./App";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -21,36 +21,7 @@ ReactDOM.render(
         // <Loader  border={10} />
         // </div>
       } persistor={persistor}>
-      <Router>
-        <Routes>
-          <Route path="/" >
-            <Route
-              path="/"
-              element={
-                <Navigate to="/home" replace />
-              }
-            />
-            <Route
-              path="*"
-              element={
-                <Navigate to="/home" replace />
-              }
-            />
-          </Route>
-          <Route
-            path="/home"
-            element={
-              <div className="App h-full text-center">
-                <Main />
-              </div>
-            }
-          />
-          <Route path="/auth" element={<div className="App h-full text-center"><AuthPage /></div>}>
-            <Route path="/auth/login" element={<Login />} />
-            <Route path="/auth/signup" element={<SignUp />} />
-          </Route>
-        </Routes>
-      </Router>
+        <App/>
       </PersistGate>
     </ReduxProvider>
   </React.StrictMode>,

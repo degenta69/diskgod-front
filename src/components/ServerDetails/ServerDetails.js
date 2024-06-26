@@ -48,18 +48,18 @@ const ServerDetails = () => {
   useEffect(() => {
     if (!serverDetails.isHome) {
       let data = JSON.parse(serverDetails.newState);
-      let userdata = userDetail.newUser;
-      setuser(userdata);
+      let userdata = userDetail.userState;
+      userdata && setuser(userdata);
       //   console.log('hello',data)
       setdata(data);
     } else {
-      let data = userDetail.newUser;
+      let data = userDetail.userState;
       console.log("hello", data);
       // console.log(data);
-      if (data.id) {
+      if (data&& data.id) {
         setisLoading(false);
       }
-      setdata(data);
+      data && setdata(data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverDetails]);

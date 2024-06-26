@@ -40,7 +40,7 @@ const SideBar = () => {
   const dispatch = useDispatch();
   // const userDetail = useSelector((state) => state.userInfo);
   const setisHome = () => {
-    // const userInfo = await JSON.parse(userDetail.newUser)
+    // const userInfo = await JSON.parse(userDetail.userState)
     // dispatch(addHomeDetail({...userInfo}))
     document.getElementsByClassName('active-server')[0]?.classList.remove('active-server')
     document.getElementById('homeId')?.classList.add('active-server')
