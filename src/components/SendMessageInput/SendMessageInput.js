@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
-// import ServerNavbar from "../ServerNavbar/ServerNavbar";
+import React, { useEffect, useState, useCallback } from "react";
 import { Box } from "@material-ui/core";
 import "./SendMessageInput.css";
 import SendIcon from "@mui/icons-material/Send";
@@ -9,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchMessagesByChatid } from "../../state/messageData/messageDataSlice";
 import Lottie from "lottie-react";
 import typingAnimationData from "../../animations/typing.json";
+
 const SendMessageInput = ({
   currentUserTyping,
   user,
@@ -19,49 +19,48 @@ const SendMessageInput = ({
   socket,
   sendMessageInput,
   socketConnected,
+  setLoading
 }) => {
   const serverInfo = useSelector((state) => state.serverDetail);
-  var serverDetail = JSON.parse(serverInfo.newState);
-
+  const serverDetail = JSON.parse(serverInfo.newState);
+  const [rows, setRows] = useState(1);
+  const [render, setRender] = useState(false);
   const [content, setContent] = useState("");
-  const [content2, setContent2] = useState("");
-  const myFormRef = useRef();
+  const [isSending, setIsSending] = useState(false);
   const dispatch = useDispatch();
 
-  const handleSendMessage = async (e) => {
+  const handleSendMessage = useCallback(async (e) => {
     e.preventDefault();
-    if(sendMessageInput.current.value == '') return
-    setContent(sendMessageInput.current.value);
-    sendMessageInput.current.value= ''
+    if (content.trim() === "" || isSending) return;
 
     const data = {
-      content: content2,
+      content,
       chatId: serverDetail._id,
     };
+
+    setIsSending(true);
+    setLoading(true);
+    setContent("");
+    sendMessageInput.current.value = "";
 
     try {
       const sendMessageApiReq = await instance.post("/api/message", data);
       if (sendMessageApiReq.status === 200) {
         socket.emit("new message", sendMessageApiReq.data);
         socket.emit("stop typing", serverDetail._id);
-        console.log(sendMessageApiReq.data);
 
         dispatch(fetchMessagesByChatid(serverDetail._id));
         dispatch(addRerender({}));
-        setContent("");
-        setContent2("");
-        myFormRef.current.reset();
-        setRender((prev) => !prev);
-      }
-      // console.log(sendMessageApiReq, 'sendMessageApiReq');
-    } catch (error) {
-      // dispatch(addRerender({}))
-      // console.log(error.request)
-    }
-  };
-  const [rows, setRows] = useState(1);
-  const [render, setRender] = useState(false);
 
+        setIsSending(false);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
+      setIsSending(false);
+      setLoading(false);
+    }
+  }, [content, isSending, serverDetail._id, setLoading, sendMessageInput, socket, dispatch]);
   useEffect(() => {
     if (rows <= 11) {
       let countLines = sendMessageInput.current.value.match(/^/gm).length;
@@ -81,78 +80,72 @@ const SendMessageInput = ({
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [render]);
-  const onEnterPress = (e) => {
-    if (e.keyCode === 13 && !e.shiftKey) {
-      e.preventDefault();
-      myFormRef.current.requestSubmit();
-    }
-  };
-  const handleOnchangeAndTyping = (e) => {
-    setRender((prev) => !prev);
-    setContent2(e.target.value);
-
+  useEffect(() => {
     if (!socketConnected) return;
 
-    if (!typing) {
-      setTyping(true);
-      socket.emit("typing", { serverDetail: serverDetail._id, user: user });
-    }
-    let lastTypingTime = new Date().getTime();
-    var timerLength = 3000;
-    setTimeout(() => {
-      var timeNow = new Date().getTime();
-      var timediff = timeNow - lastTypingTime;
-      if (timediff >= timerLength && typing) {
+    const handleTyping = () => {
+      setRender((prev) => !prev);
+      if (!isTyping) {
+        setTyping(true);
+        socket.emit("typing", { serverDetail: serverDetail._id, user: user });
+      }
+      let lastTypingTime = new Date().getTime();
+      let timerLength = 3000;
+      setTimeout(() => {
+        let timeNow = new Date().getTime();
+      let timediff = timeNow - lastTypingTime;
+      if(timediff >= timerLength && typing){
+        console.log('stoped')
+
         socket.emit("stop typing", serverDetail._id);
         setTyping(false);
       }
-    }, timerLength);
-  };
-  // const typingAnimationConfig = {
-  //   loop: true,
-  //   autoplay: true,
-  //   animationData: typingAnimationData,
-  //   rendererSettings: {
-  //     preserveAspectRatio: 'xMidYMid slice'
+      }, timerLength);
 
-  //   }
-  // }
+      // return () => clearTimeout(timer);
+    };
+
+    handleTyping();
+  }, [content]);
+
+  const onEnterPress = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage(e);
+    }
+  };
+
   return (
-    <>
-      <Box className="sendMessageFormWrapper">
-        <form ref={myFormRef} onSubmit={handleSendMessage}>
-          <SendIcon onClick={handleSendMessage} className="sendMessageIcon" />
-          <textarea
-            autoComplete="off"
-            onChange={handleOnchangeAndTyping}
-            className="chat-textarea hideScrollbar"
-            type="text"
-            rows={rows}
-            ref={sendMessageInput}
-            onKeyDown={onEnterPress}
-            // onKeyUp={onEnterPress}
-            placeholder={`Message ${serverDetail.chatName}`}
-          />
-          {/*<input type="submit" className="hidden" placeholder="Search" />*/}
-        <div>
-          {isTyping && (
-            <div style={{display:'flex', alignItems:'flex-end'}}>
-              {" "}
-              <Lottie
-                style={{ width: "50px" }}
-                loop
-                autoPlay
-                animationData={typingAnimationData}
-              />
-              <p style={{color:'#9d9797', fontSize:'14px'}}>
-              <span style={{fontWeight:'700'}}>{currentUserTyping.name}</span> is typing...
-              </p>
-            </div>
-          )}
-        </div>
-        </form>
-      </Box>
-    </>
+    <Box className="sendMessageFormWrapper">
+      <form onSubmit={handleSendMessage}>
+        <SendIcon onClick={handleSendMessage} className="sendMessageIcon" />
+        <textarea
+          ref={sendMessageInput}
+          autoComplete="off"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          className="chat-textarea hideScrollbar"
+          type="text"
+          rows={rows}
+          onKeyDown={onEnterPress}
+          placeholder={`Message ${serverDetail.chatName}`}
+          disabled={isSending}
+        />
+        {isTyping && (
+          <div style={{ display: "flex", alignItems: "flex-end" }}>
+            <Lottie
+              style={{ width: "50px" }}
+              loop
+              autoPlay
+              animationData={typingAnimationData}
+            />
+            <p style={{ color: "#9d9797", fontSize: "14px" }}>
+              <span style={{ fontWeight: "700" }}>{currentUserTyping.name}</span> is typing...
+            </p>
+          </div>
+        )}
+      </form>
+    </Box>
   );
 };
 
