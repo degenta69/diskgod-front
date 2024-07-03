@@ -29,9 +29,11 @@ const SendMessageInput = ({
   const dispatch = useDispatch();
 
   const handleSendMessage = async (e) => {
-    setContent(sendMessageInput.current.value);
-
     e.preventDefault();
+    if(sendMessageInput.current.value == '') return
+    setContent(sendMessageInput.current.value);
+    sendMessageInput.current.value= ''
+
     const data = {
       content: content2,
       chatId: serverDetail._id,
@@ -131,7 +133,7 @@ const SendMessageInput = ({
             // onKeyUp={onEnterPress}
             placeholder={`Message ${serverDetail.chatName}`}
           />
-          <input type="submit" className="hidden" placeholder="Search" />
+          {/*<input type="submit" className="hidden" placeholder="Search" />*/}
         <div>
           {isTyping && (
             <div style={{display:'flex', alignItems:'flex-end'}}>
