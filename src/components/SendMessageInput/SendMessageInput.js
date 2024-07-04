@@ -22,6 +22,7 @@ const SendMessageInput = ({
   setLoading
 }) => {
   const serverInfo = useSelector((state) => state.serverDetail);
+  const userInfo = useSelector((state) => state.userInfo);
   const serverDetail = JSON.parse(serverInfo.newState);
   const [rows, setRows] = useState(1);
   const [render, setRender] = useState(false);
@@ -36,17 +37,18 @@ const SendMessageInput = ({
     const data = {
       content,
       chatId: serverDetail._id,
+      userId:userInfo.newUser.id
     };
-
+console.log(data)
     setIsSending(true);
     setLoading(true);
     setContent("");
     sendMessageInput.current.value = "";
 
     try {
-      const sendMessageApiReq = await instance.post("/api/message", data);
-      if (sendMessageApiReq.status === 200) {
-        socket.emit("new message", sendMessageApiReq.data);
+      // const sendMessageApiReq = await instance.post("/api/message", data);
+      // if (sendMessageApiReq.status === 200) {
+        socket.emit("new message", data);
         socket.emit("stop typing", serverDetail._id);
 
         dispatch(fetchMessagesByChatid(serverDetail._id));
@@ -54,7 +56,7 @@ const SendMessageInput = ({
 
         setIsSending(false);
         setLoading(false);
-      }
+      // }
     } catch (error) {
       console.error(error);
       setIsSending(false);

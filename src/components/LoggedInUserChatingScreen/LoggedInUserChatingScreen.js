@@ -111,6 +111,7 @@ const LoggedInUserChatingScreen = () => {
 
   useEffect(() => {
     socket.on("message received", (newMessageReceived) => {
+      console.log('fired in socket')
       const serverDetail = JSON.parse(serverInfo.newState);
       if (!selectedChatCompare || selectedChatCompare._id !== newMessageReceived.chat._id) {
         console.log("Message received but not in selected chat");
