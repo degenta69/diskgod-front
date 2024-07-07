@@ -28,7 +28,7 @@ const LoginForm = () => {
     const loginReq = await axios
       .post(`/api/user/login`, userInfo)
       .catch((err) => {
-        console.log(err.response);
+        console.log(err);
         if(err.response.status.toString().indexOf('401')>-1){
           return setError(err.response.data?err.response.data:"Invalid Credentials ");
         }
