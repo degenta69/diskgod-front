@@ -22,7 +22,7 @@ import instance from "../../api/axios";
 import uploadImageToCloud from "../../utils/uploadImageToCloud";
 import { addRerender } from "../../state/serverDetailData/serverDetailSlice";
 import AlertModal from "../AlertModal/AlertModal";
-import { ApiRequestHandler } from "../../api/apiRepositery";
+import { ApiRequestHandler } from "../../api/apiRepository";
 import UrlPaths from "../../Models/UrlPaths";
 import ApiMethods from "../../Models/ApiMethods";
 
@@ -50,11 +50,11 @@ export default function AddGroupChatModal() {
   });
   const [openAlert, setOpenAlert] = React.useState(false);
   const [alertMsg, setAlertMsg] = React.useState({ status: "", msg: "" });
-  const GetUsers = async()=>{
-    const successCb = (res)=>{
+  const GetUsers = async () => {
+    const successCb = (res) => {
       setSearchResult(res.data)
     }
-    const errorCb = (error)=>{
+    const errorCb = (error) => {
       setOpenAlert(true);
       setAlertMsg({
         status: "error",
@@ -67,13 +67,13 @@ export default function AddGroupChatModal() {
     }
 
     await ApiRequestHandler(
-      UrlPaths.SEARCH_USER.replace("?queryData",searchQuery.search ?? ""),
+      UrlPaths.SEARCH_USER.replace("?queryData", searchQuery.search ?? ""),
       ApiMethods.GET,
       null,
       successCb,
       errorCb
     )
-  } 
+  }
   React.useEffect(() => {
     (async () => await GetUsers())();
     return () => {

@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import UserList from "./userList";
 import instance from "../../api/axios";
-import { ApiRequestHandler } from "../../api/apiRepositery";
+import { ApiRequestHandler } from "../../api/apiRepository";
 import UrlPaths from "../../Models/UrlPaths";
 import ApiMethods from "../../Models/ApiMethods";
 

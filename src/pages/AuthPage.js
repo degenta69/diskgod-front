@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router";
-import BackgroundSVG from "../SVG/BackgroundSVG";
-import {useMediaQuery} from 'react-responsive';
+import FluidBackground from "../components/FluidBackground";
+import { useMediaQuery } from 'react-responsive';
 
 const AuthPage = () => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
@@ -9,23 +9,23 @@ const AuthPage = () => {
   const nav = useNavigate()
   useEffect(() => {
     // console.log(location)
-    if(location.pathname === '/auth/login'){
+    if (location.pathname === '/auth/login') {
       document.title = 'Login'
-    }else{  
+    } else {
       document.title = 'Sign Up'
     }
-    if(localStorage.getItem('diskGodUserToken')){
+    if (localStorage.getItem('diskGodUserToken')) {
       nav('/home')
     }
 
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location]);
   return (
     <div className="h-full w-full relative flex">
-        <BackgroundSVG className='fixed z-0 top-0 left-0 w-full h-full'/>
-      <div className={`m-auto ${isTabletOrMobile?'h-screen w-screen':location.pathname==='/auth/signup'?'w-35':`w-7/12`}  rounded p-8 z-10 h-max bg-serverBG`}>
-        <Outlet/>
+      <FluidBackground />
+      <div className={`m-auto ${isTabletOrMobile ? 'w-11/12 my-auto' : location.pathname === '/auth/signup' ? 'w-35' : `w-7/12`} rounded-3xl p-8 z-10 h-max bg-slate-900/30 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] skew-y-0`}>
+        <Outlet />
         {/* <Login /> */}
         {/* <SignUp /> */}
       </div>
