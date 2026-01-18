@@ -62,35 +62,26 @@ const LoggedInUserChatingScreen = () => {
     setCurrentUserTyping('')
   }, [])
 
+  const handleSendMessage = useCallback(async (message) => {
+    // 1. Optimistic update (Already done in SendMessageInput, but we can dispatch here for consistency)
+    dispatch(addNewMessage(message))
 
-
-  const handleSendMessage = useCallback(async (messagePayload) => {
-    // OPTIMISTIC UPDATE
-    dispatch(addNewMessage(messagePayload));
-    scrollToBottom();
-
+    // 2. API call to persist
     try {
-      // API CALL
-      const { data } = await axios.post("/api/message", {
-        content: messagePayload.content,
-        chatId: messagePayload.chatId,
-      });
-
-      // SOCKET EMIT
-      socket.emit("new message", data);
-
+      await axios.post('/api/message', {
+        chatId: message.chatId,
+        content: message.content
+      })
+      // 3. Emit socket event for real-time delivery to others
+      socket.emit('new message', message)
     } catch (error) {
-      console.error("Error Sending Message:", error);
+      console.error('Failed to send message:', error)
     }
-  }, [scrollToBottom, dispatch])
+  }, [dispatch])
 
   useEffect(() => {
     socket.emit('setup', user)
     socket.on('connected', () => setSocketConnected(true))
-
-    return () => {
-      socket.off('connected')
-    }
   }, [user])
 
   useEffect(() => {
@@ -107,11 +98,11 @@ const LoggedInUserChatingScreen = () => {
 
   useEffect(() => {
     if (serverDetail && serverDetail._id) {
-      socket.emit('join room', serverDetail._id) // 1. Join the room first
-      dispatch(fetchMessagesByChatid(serverDetail._id)) // 2. Then fetch messages
+      socket.emit('join room', serverDetail._id)
+      dispatch(fetchMessagesByChatid(serverDetail._id))
       dispatch(addRerender())
 
-      // Feature: Mark Chat as Read
+      // Mark Chat as Read
       const currentUserId = user._id || user.id;
       if (serverDetail._id && currentUserId) {
         socket.emit("mark chat read", { chatId: serverDetail._id, userId: currentUserId });

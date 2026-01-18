@@ -5,35 +5,40 @@ import LoggedInUserChatingScreen from "../LoggedInUserChatingScreen/LoggedInUser
 import SearchUser from "../SearchUser/SearchUser";
 import ServerNavbar from "../ServerNavbar/ServerNavbar";
 import "./ChatScreen.css";
+
 const ChatScreen = () => {
-    
+
   const serverDetails = useSelector((state) => state.serverDetail);
-  const [newServerDetail , setNewServerDetail] = useState(serverDetails);
-  
+  const [newServerDetail, setNewServerDetail] = useState(serverDetails);
+
   useEffect(() => {
-   let data = JSON.parse(serverDetails.newState)
+    let data = JSON.parse(serverDetails.newState)
     setNewServerDetail(data)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serverDetails.render]);
 
-  // console.log(serverDetails, 'serverDetails');
-  return serverDetails.isHome?(
-    <>
-    
-    <ServerNavbar isHome/>
-    <Box sx={{height:'calc(100vh - 7vh)'}} className="searchUserWrapper m-6">
-    <SearchUser/>
-    </Box>
-    </>
-  ):(
-    <>
-    
-    <ServerNavbar serverDetail={JSON.parse(serverDetails.newState)}/>
-    
-    <Box sx={{height: 'calc(100vh - 7vh)',overflow:'hidden',maxHeight:'100%'}} className="  ">
-    <LoggedInUserChatingScreen serverDetail={newServerDetail}/>
-    </Box>
-    </>
+  return (
+    <div className="flex flex-col h-full overflow-hidden">
+      {/* Navbar - shrinks to content */}
+      <div className="shrink-0">
+        {serverDetails.isHome ? (
+          <ServerNavbar isHome />
+        ) : (
+          <ServerNavbar serverDetail={JSON.parse(serverDetails.newState)} />
+        )}
+      </div>
+
+      {/* Content - takes remaining space */}
+      <div className="flex-1 overflow-hidden">
+        {serverDetails.isHome ? (
+          <Box className="searchUserWrapper h-full overflow-auto p-4">
+            <SearchUser />
+          </Box>
+        ) : (
+          <LoggedInUserChatingScreen serverDetail={newServerDetail} />
+        )}
+      </div>
+    </div>
   );
 };
 

@@ -7,9 +7,11 @@
   max-height: 50vh;
   color: #fff;
 }
+
 .chat-textarea:focus {
   outline: none;
 }
+
 .sendMessageFormWrapper {
   position: relative;
   /* width: 71%; */
@@ -30,9 +32,11 @@
   width: calc(100vw - 10vw);
   margin-bottom: 1rem;
 }
+
 .sendMessageIcon:hover {
-color: #f9f3ff;
+  color: #f9f3ff;
 }
+
 .sendMessageIcon {
   position: absolute;
   top: 16px;
@@ -43,6 +47,14 @@ color: #f9f3ff;
 
 @media (max-width: 900px) {
   .sendMessageFormWrapper {
-    /* width: 65%; */
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .sendMessageFormWrapper form {
+    position: relative;
+    bottom: auto;
+    margin-bottom: 0;
+    width: 100%;
   }
 }

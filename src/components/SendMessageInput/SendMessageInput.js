@@ -25,7 +25,6 @@ const SendMessageInput = ({
   isTyping,
   currentUserTyping,
   sendMessageInput,
-  setLoading,
   onSendMessage
 }) => {
   const [rows, setRows] = useState(1);
@@ -47,10 +46,6 @@ const SendMessageInput = ({
     };
 
     setIsSending(true);
-    setLoading(true);
-
-    setIsSending(true);
-    setLoading(true);
 
     try {
       socket.emit("stop typing", serverDetail._id);
@@ -70,9 +65,8 @@ const SendMessageInput = ({
       setContent("");
       sendMessageInput.current.value = "";
       setIsSending(false);
-      setLoading(false);
     }
-  }, [content, isSending, serverDetail._id, user, setLoading, sendMessageInput, socket, setTyping, setIsTyping, onSendMessage]);
+  }, [content, isSending, serverDetail._id, user, sendMessageInput, socket, setTyping, setIsTyping, onSendMessage]);
 
   const debouncedTyping = useCallback(() =>
     debounce(() => {

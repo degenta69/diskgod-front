@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addServerDetail } from "../../state/serverDetailData/serverDetailSlice";
 import { fetchMessagesByChatid } from "../../state/messageData/messageDataSlice";
 
-const ServerListings = ({ data }) => {
+const ServerListings = ({ data, horizontal = false }) => {
   const dispatch = useDispatch();
   const { newState, isHome } = useSelector(state => state.serverDetail);
 
@@ -14,7 +14,7 @@ const ServerListings = ({ data }) => {
     const currentServer = JSON.parse(newState);
     currentServerId = currentServer?._id;
   } catch (e) {
-    console.error("Failed to parse server state", e);
+    // Silent fail
   }
 
   const handleServerData = async (server) => {
@@ -23,11 +23,15 @@ const ServerListings = ({ data }) => {
   }
 
   return (
-    <div className="flex flex-col gap-2 w-full items-center">
+    <div className={`flex ${horizontal ? 'flex-row gap-3' : 'flex-col gap-2 w-full'} items-center`}>
       {data.map((server, key) => {
         const isActive = !isHome && currentServerId === server._id;
         return (
-          <div key={key} onClick={() => { handleServerData(server) }} className="z-40 w-full flex justify-center">
+          <div
+            key={key}
+            onClick={() => { handleServerData(server) }}
+            className={`z-40 ${horizontal ? 'shrink-0' : 'w-full flex justify-center'}`}
+          >
             <ServerIconButton
               _id={server._id}
               data={server}
