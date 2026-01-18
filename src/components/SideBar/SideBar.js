@@ -38,27 +38,27 @@ const SideBar = () => {
     getServer();
   }, [rerender]);
   const dispatch = useDispatch();
-  // const userDetail = useSelector((state) => state.userInfo);
-  const setisHome = () => {
-    // const userInfo = await JSON.parse(userDetail.newUser)
-    // dispatch(addHomeDetail({...userInfo}))
-    document.getElementsByClassName('active-server')[0]?.classList.remove('active-server')
-    document.getElementById('homeId')?.classList.add('active-server')
+  const { isHome } = useSelector((state) => state.serverDetail);
 
+  const setisHome = () => {
     dispatch(addHomeDetail({}));
-    // console.log(userInfo)
   };
+
   const handleAddGroup = async () => {
     dispatch(setOpen())
   }
+
   return (
-    <div className="flex flex-col MAXlg:flex-row gap-2">
-      <div onClick={setisHome}>
-        <ServerIconButton serverNumber={servers.length} profile show={true} />
+    <div className="flex flex-col gap-4 w-full items-center">
+      <div onClick={setisHome} className="w-full flex justify-center">
+        <ServerIconButton
+          unreadMessageCount={servers.length}
+          profile
+          show={true}
+          isActive={isHome}
+        />
       </div>
-      <div className="listItem-3SmSlK MAXlg:flex">
-        <div className="guildSeparator-a4uisj"></div>
-      </div>
+      <div className="w-8 h-[2px] bg-slate-700 rounded-full my-2"></div>
       <ServerListings data={servers} />
       <ServerIconButton onClick={handleAddGroup} add show={false} />
     </div>

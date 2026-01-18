@@ -29,39 +29,39 @@ const LoginForm = () => {
       .post(`/api/user/login`, userInfo)
       .catch((err) => {
         console.log(err);
-        if(err.response.status.toString().indexOf('401')>-1){
-          return setError(err.response.data?err.response.data:"Invalid Credentials ");
+        if (err.response.status.toString().indexOf('401') > -1) {
+          return setError(err.response.data ? err.response.data : "Invalid Credentials ");
         }
-        if(err.response.status.toString().indexOf('500')>-1){
-          return setError(err.response.data?err.response.data:"try again later");
+        if (err.response.status.toString().indexOf('500') > -1) {
+          return setError(err.response.data ? err.response.data : "try again later");
         }
-        if(err.response.status.toString().indexOf('400')>-1){
-          return setError(err.response.data?err.response.data:"Invalid Credentials ");
+        if (err.response.status.toString().indexOf('400') > -1) {
+          return setError(err.response.data ? err.response.data : "Invalid Credentials ");
 
         }
-        if(err.response.status.toString().indexOf('404')>-1){
-          return setError(err.response.data?err.response.data:"No user found");
+        if (err.response.status.toString().indexOf('404') > -1) {
+          return setError(err.response.data ? err.response.data : "No user found");
 
         }
-        if(err.response.status.toString().indexOf('408')>-1){
-          return setError(err.response.data?err.response.data:"try again later"); 
+        if (err.response.status.toString().indexOf('408') > -1) {
+          return setError(err.response.data ? err.response.data : "try again later");
 
         }
       });
 
     if (loginReq) {
-      dispatch(addUser({...loginReq.data.user}))
+      dispatch(addUser({ user: loginReq.data.user, token: loginReq.data.token }))
       localStorage.setItem(
         "diskGodUserToken",
         JSON.stringify({ access: loginReq.data.token })
       );
       instance({
-        headers:{
+        headers: {
           Authorization: `Bearer ${loginReq.data.token}`
         }
       })
       nav("/home");
-      window.location.reload();
+      // window.location.reload(); // Removed to rely on clean Redux state update
       setError(null);
     }
   };

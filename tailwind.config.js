@@ -29,12 +29,24 @@ module.exports = {
         badgeBG: "rgb(236,66,68)",
         textNormal: "#dcddde",
         hoverBG: "#475569", // Slate 600
+        // New Futuristic Glass Tokens
+        glass: {
+          10: "rgba(255, 255, 255, 0.1)",
+          20: "rgba(255, 255, 255, 0.2)",
+          30: "rgba(15, 23, 42, 0.6)", // Darker glass base
+        },
+        neon: {
+          blue: "#00ffff",
+          pink: "#ff00ff",
+        }
+      },
+      backgroundImage: {
+        'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',
       },
     },
   },
   variants: {
     extend: {
-
       animation: ['motion-reduce'],
       transitionProperty: [
         'hover',

@@ -5,9 +5,11 @@ import serverDetailReducer from './serverDetailData/serverDetailSlice'
 import messageDetailReducer from './messageData/messageDataSlice'
 import userInfoReducer from './userInfoData/userInfoSlice'
 
+import profileModalReducer from './profileModal/profileModalSlice'
+
 // redux-persist
 import storage from 'redux-persist/lib/storage';
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 import {
   FLUSH,
   PAUSE,
@@ -23,8 +25,9 @@ const rootReducer = combineReducers({
   modalShow: modalShowReducer,
   muiModalShow: muiModalShowReducer,
   serverDetail: serverDetailReducer,
-  userInfo:  userInfoReducer,
+  userInfo: userInfoReducer,
   messageDetail: messageDetailReducer,
+  profileModal: profileModalReducer,
 });
 
 const persistConfig = {
@@ -40,7 +43,7 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const store = configureStore({
   reducer: persistedReducer,
-  middleware:(getDefaultMiddleware)=>{
+  middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],

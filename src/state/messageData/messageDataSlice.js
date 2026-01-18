@@ -35,6 +35,26 @@ export const messageDataSlice = createSlice({
     addRerender: (state) => {
       state.rerender = !state.rerender;
     },
+    updateReadStatus: (state, action) => {
+      const { chatId, userId } = action.payload;
+      // Efficiently update - simplistic since we assume all messages in this chat are read by this user
+      // In a real paginated app, we might only update visible ones.
+      // For now, iterate all since conversation size is small-ish
+      state.messages.forEach((msg, index) => {
+        // Check if message belongs to this chat (redundant if store only has this chat's messages, but safe)
+        const msgChatId = msg.chat ? (msg.chat._id || msg.chat) : null;
+
+        // Loose comparison for ID safety (String vs Object)
+        if (msgChatId && msgChatId.toString() === chatId.toString()) {
+          // Initialize readBy if missing
+          if (!msg.readBy) msg.readBy = [];
+
+          if (!msg.readBy.includes(userId)) {
+            msg.readBy.push(userId);
+          }
+        }
+      });
+    },
     // decrement: (state) => {
     //   state.value -= 1
     // },
@@ -57,6 +77,6 @@ export const messageDataSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { getDetail, addNewMessage, addHomeDetail, addRerender } =
+export const { getDetail, addNewMessage, addHomeDetail, addRerender, updateReadStatus } =
   messageDataSlice.actions;
 export default messageDataSlice.reducer;

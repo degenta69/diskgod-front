@@ -31,7 +31,6 @@ const SendMessageInput = ({
   const [rows, setRows] = useState(1);
   const [content, setContent] = useState("");
   const [isSending, setIsSending] = useState(false);
-  const typingTimeoutRef = useRef(null);
 
   const handleSendMessage = useCallback(async (e) => {
     e.preventDefault();
@@ -39,21 +38,32 @@ const SendMessageInput = ({
 
     const newMessage = {
       content,
-      chatId: serverDetail._id,
-      userId: user.id,
-      sender: { _id: user.id, name: user.name },
-      createdAt: new Date(),
+      chat: { _id: serverDetail._id }, // CORRECT STRUCTURE for Redux
+      chatId: serverDetail._id,        // Keep for API payload if needed
+      userId: user._id || user.id,
+      sender: { _id: user._id || user.id, name: user.name, profilepic: user.profilepic },
+      createdAt: new Date().toISOString(),
+      readBy: [] // Initialize empty readBy
     };
 
     setIsSending(true);
     setLoading(true);
 
+    setIsSending(true);
+    setLoading(true);
+
     try {
-      socket.emit("new message", newMessage);
       socket.emit("stop typing", serverDetail._id);
       setTyping(false);
       setIsTyping(false);
-      // onSendMessage(newMessage); // Add the message to the local list immediately
+
+
+      // Delegate to Parent (API Call + Dispatch)
+      // Pass content mostly, or full object?
+      // Parent expects "message" argument. Previous traces showed logic expecting 'content' to extract.
+      // But let's pass the OBJECT and handle destructuring in Parent.
+      onSendMessage(newMessage);
+
     } catch (error) {
       console.error("Error sending message:", error);
     } finally {
@@ -62,9 +72,9 @@ const SendMessageInput = ({
       setIsSending(false);
       setLoading(false);
     }
-  }, [content, isSending, serverDetail._id, user, setLoading, sendMessageInput, socket, setTyping, setIsTyping]);
+  }, [content, isSending, serverDetail._id, user, setLoading, sendMessageInput, socket, setTyping, setIsTyping, onSendMessage]);
 
-  const debouncedTyping = useCallback(()=>
+  const debouncedTyping = useCallback(() =>
     debounce(() => {
       socket.emit("stop typing", serverDetail._id);
       setTyping(false);
@@ -119,6 +129,7 @@ const SendMessageInput = ({
         <textarea
           ref={sendMessageInput}
           autoComplete="off"
+          name="message-input"
           value={content}
           onChange={(e) => setContent(e.target.value)}
           className="chat-textarea hideScrollbar"

@@ -7,9 +7,11 @@
   left: 16px;
   margin-top: calc(8px - 0.125rem);
 }
+
 .chat-box-spacing:hover {
   background-color: #32343a;
 }
+
 .chat-box-spacing {
   margin-top: 1.06275rem;
   position: relative;
@@ -17,13 +19,15 @@
   padding-right: 48px;
   min-height: 4rem;
 }
+
 .chat-box {
   text-align: left;
 }
+
 .chat-box-header {
-    display: flex;
-     gap: 2rem; 
-   /* justify-content: space-between; */
+  display: flex;
+  gap: 2rem;
+  /* justify-content: space-between; */
 }
 
 .chat-box-wrapper {
@@ -69,7 +73,20 @@
 
 @media (max-width: 900px) {
   .chat-box-wrapper {
-    height: calc(100% - 22%);
+    height: calc(100vh - 160px);
+    /* Better dynamic height for mobile */
     overflow-y: scroll;
+    padding-bottom: 20px;
+  }
+
+  .chat-box-header {
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-start;
+  }
+
+  .chat-box-time {
+    font-size: 0.65rem;
+    /* Slightly smaller on mobile */
   }
 }

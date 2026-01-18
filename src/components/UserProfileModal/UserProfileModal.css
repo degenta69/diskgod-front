@@ -1,0 +1,114 @@
+.profile-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1300; /* High z-index to sit on top of everything */
+    backdrop-filter: blur(5px);
+}
+
+.profile-card {
+    width: 600px; /* Discord full profile size approx */
+    background: #111214; /* Darker Discord BG */
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+    position: relative;
+    animation: scaleIn 0.2s ease-out;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.profile-banner {
+    height: 210px; /* Discord large banner height */
+    background-color: #5c2c2c; /* Default fallback color */
+    background-size: cover;
+    background-position: center;
+}
+
+.profile-avatar-wrapper {
+    position: absolute;
+    top: 160px; /* Banner height - overlap */
+    left: 20px;
+    padding: 6px;
+    background: #111214; /* Match card bg for border effect */
+    border-radius: 50%;
+}
+
+.profile-content {
+    background: #111214;
+    padding: 60px 20px 20px 20px; /* Top padding clears avatar */
+    min-height: 300px;
+}
+
+.profile-name-section {
+    margin-bottom: 20px;
+}
+
+.profile-username {
+    font-size: 24px;
+    font-weight: 700;
+    color: white;
+}
+
+.profile-discriminator {
+    color: #b9bbbe;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.profile-divider {
+    height: 1px;
+    background: #2f3136;
+    margin: 20px 0;
+}
+
+.profile-section-header {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #b9bbbe;
+    margin-bottom: 8px;
+}
+
+.profile-bio {
+    color: #dcddde;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.online-indicator-border {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    width: 25px;
+    height: 25px;
+    background: #111214;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.online-dot {
+    width: 15px;
+    height: 15px;
+    background: #3ba55c; /* Green */
+    border-radius: 50%;
+}
+
+.offline-dot {
+    width: 15px;
+    height: 15px;
+    background: #747f8d; /* Grey */
+    border-radius: 50%;
+    border: 3px solid #111214;
+}

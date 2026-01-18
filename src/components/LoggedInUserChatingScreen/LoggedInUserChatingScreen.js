@@ -9,9 +9,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import dayjs from 'dayjs'
 import LocalizedFormat from 'dayjs/plugin/localizedFormat'
 import { getDateFormat } from '../../utils/messageUtils'
-import { fetchMessagesByChatid } from '../../state/messageData/messageDataSlice'
+import { fetchMessagesByChatid, addNewMessage, addRerender } from '../../state/messageData/messageDataSlice'
+import { openProfileModal } from '../../state/profileModal/profileModalSlice'
+import MessageStatus from '../MessageStatus/MessageStatus'
 import socket from '../../socket/socketioLogic'
-import Lottie from 'lottie-react'
+import axios from '../../api/axios'
 
 dayjs.extend(LocalizedFormat)
 
@@ -33,17 +35,16 @@ const LoggedInUserChatingScreen = () => {
   const sendMessageInput = useRef()
   const messagesEndRef = useRef(null)
   const dispatch = useDispatch()
-  
+
   const user = useSelector(state => state.userInfo.newUser)
   const serverInfo = useSelector(state => state.serverDetail)
   const messages = useSelector(state => state.messageDetail.messages)
-  
-  const [localMessageList, setLocalMessageList] = useState([])
+
+
   const [socketConnected, setSocketConnected] = useState(false)
   const [typing, setTyping] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
   const [currentUserTyping, setCurrentUserTyping] = useState('')
-  const [loading, setLoading] = useState(false)
 
   const serverDetail = useMemo(() => JSON.parse(serverInfo.newState), [serverInfo.newState])
 
@@ -52,33 +53,41 @@ const LoggedInUserChatingScreen = () => {
   }, [])
 
   const handleTyping = useCallback((socketUser) => {
-    console.log('typing started by',socketUser)
     setIsTyping(true)
     setCurrentUserTyping(socketUser)
   }, [])
 
   const handleStopTyping = useCallback(() => {
-    console.log('stopped typing')
     setIsTyping(false)
     setCurrentUserTyping('')
   }, [])
 
-  const handleNewMessage = useCallback((newMessageReceived) => {
-    if (serverDetail && serverDetail._id === newMessageReceived.chat._id) {
-      setLocalMessageList(prev => [...prev, newMessageReceived])
-      scrollToBottom()
-    }
-  }, [serverDetail, scrollToBottom])
 
-  const handleSendMessage = useCallback((message) => {
-    setLocalMessageList(prev => [...prev, message])
-    scrollToBottom()
-  }, [scrollToBottom])
+
+  const handleSendMessage = useCallback(async (messagePayload) => {
+    // OPTIMISTIC UPDATE
+    dispatch(addNewMessage(messagePayload));
+    scrollToBottom();
+
+    try {
+      // API CALL
+      const { data } = await axios.post("/api/message", {
+        content: messagePayload.content,
+        chatId: messagePayload.chatId,
+      });
+
+      // SOCKET EMIT
+      socket.emit("new message", data);
+
+    } catch (error) {
+      console.error("Error Sending Message:", error);
+    }
+  }, [scrollToBottom, dispatch])
 
   useEffect(() => {
     socket.emit('setup', user)
     socket.on('connected', () => setSocketConnected(true))
-    
+
     return () => {
       socket.off('connected')
     }
@@ -88,45 +97,58 @@ const LoggedInUserChatingScreen = () => {
     if (socketConnected) {
       socket.on('typing', handleTyping)
       socket.on('stop typing', handleStopTyping)
-      socket.on('message received', handleNewMessage)
     }
 
     return () => {
       socket.off('typing')
       socket.off('stop typing')
-      socket.off('message received')
     }
-  }, [socketConnected, handleTyping, handleStopTyping, handleNewMessage])
+  }, [socketConnected, handleTyping, handleStopTyping])
 
   useEffect(() => {
     if (serverDetail && serverDetail._id) {
-      socket.emit('join room', serverDetail._id)
-      dispatch(fetchMessagesByChatid(serverDetail._id))
+      socket.emit('join room', serverDetail._id) // 1. Join the room first
+      dispatch(fetchMessagesByChatid(serverDetail._id)) // 2. Then fetch messages
+      dispatch(addRerender())
+
+      // Feature: Mark Chat as Read
+      const currentUserId = user._id || user.id;
+      if (serverDetail._id && currentUserId) {
+        socket.emit("mark chat read", { chatId: serverDetail._id, userId: currentUserId });
+      }
     }
-  }, [serverDetail, dispatch])
+  }, [serverDetail, dispatch, user])
 
   useEffect(() => {
-    setLocalMessageList(messages)
     scrollToBottom()
   }, [messages, scrollToBottom])
 
   return (
     <>
       <Box className='hideScrollbar overflow-scroll chat-box-wrapper'>
-        {localMessageList.map((message, i) => (
+        {messages.map((message, i) => (
           <React.Fragment key={`chat-box-fragment-${i}`}>
             <Box className='chat-box-spacing'>
               <Box className='chat-box'>
-                <BlackTooltip placement={'bottom'} title={message?.sender?.name}>
-                  <img className='user-pfp' src={message?.sender?.profilepic} alt='pfp' />
+                <BlackTooltip placement={'bottom'} title={message?.sender?.name || "Unknown User"}>
+                  <img
+                    className='user-pfp'
+                    src={message?.sender?.profilepic || "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg"}
+                    alt='pfp'
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => dispatch(openProfileModal(message.sender))}
+                  />
                 </BlackTooltip>
                 <Box className='chat-box-header'>
                   <Box className='chat-box-sender-name'>
-                    <p>{message?.sender?.name}</p>
+                    <p>{message?.sender?.name || "Unknown"}</p>
                   </Box>
-                  <BlackTooltip placement={'top'} title={dayjs(message?.createdAt).format('LLLL')}>
-                    <Box className='chat-box-time'>
-                      <p>{getDateFormat(message?.createdAt)}</p>
+                  <BlackTooltip placement={'top'} title={message?.createdAt ? dayjs(message?.createdAt).format('LLLL') : "Unknown Date"}>
+                    <Box style={{ display: 'flex', alignItems: 'flex-end' }}>
+                      <span style={{ fontSize: "10px", marginTop: "auto", marginLeft: "4px" }}>
+                        {getDateFormat(message.createdAt)}
+                      </span>
+                      <MessageStatus message={message} chat={serverDetail} currentUser={user} />
                     </Box>
                   </BlackTooltip>
                 </Box>
@@ -150,7 +172,6 @@ const LoggedInUserChatingScreen = () => {
         socketConnected={socketConnected}
         socket={socket}
         sendMessageInput={sendMessageInput}
-        setLoading={setLoading}
         onSendMessage={handleSendMessage}
       />
     </>

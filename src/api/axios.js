@@ -2,6 +2,7 @@ import axios from 'axios'
 import jwt_decode from 'jwt-decode'
 import dayjs from 'dayjs'
 
+// axios.defaults.baseURL = 'http://localhost:6453';
 axios.defaults.baseURL = process.env.REACT_APP_BASE_URL
 // axios.defaults.headers.common['Access-Control-Allow-Origin'] = 'http://localhost:3000';
 
@@ -10,64 +11,43 @@ var authTokens = localStorage.getItem('diskGodUserToken')
   : null
 
 const instance = axios.create({
-  baseURL:  process.env.REACT_APP_BASE_URL,
+  baseURL: process.env.REACT_APP_BASE_URL,
   headers: {
     Authorization: `Bearer ${authTokens?.access}`
   },
 })
 
 // interceptor for refreshing the access token
-// if (localStorage.getItem('diskGodUserToken')) {
-//   instance.interceptors.request.use(req => {
-//     //checks if the token is there, if not then adds it in the storage and header
-//     var authToken = localStorage.getItem('diskGodUserToken')
-//       ? JSON.parse(localStorage.getItem('diskGodUserToken'))
-//       : null
+instance.interceptors.request.use(async req => {
+  // checks if the token is there, if not then adds it in the storage and header
+  const storageToken = localStorage.getItem('diskGodUserToken')
+  const authTokens = storageToken ? JSON.parse(storageToken) : null
 
-//     //decodes the jwt access token to get the expiration date then compares it with current date and time
-//     const decoded_token = jwt_decode(authTokens.access)
-//     const isExpired = dayjs.unix(decoded_token.exp).diff(dayjs()) < 1
+  if (authTokens?.access) {
+    req.headers.Authorization = `Bearer ${authTokens.access}`
 
-//     //if the access token is expired
-//     //another req is made which gives new access token using the refresh token
-//     if (isExpired) {
-//       // console.log(
-//       //   'isExpired:',
-//       //   isExpired,
-//       //   'decoded_token:',
-//       //   decoded_token,
-//       //   'authToken:',
-//       //   authToken,
-//       //   'authtokens:',
-//       //   authTokens
-//       // )
+    // Optional: Token Expiry Check & Refresh Logic
+    const decoded_token = jwt_decode(authTokens.access)
+    const isExpired = dayjs.unix(decoded_token.exp).diff(dayjs()) < 1
 
-//       try {
-//         axios
-//           .post('/account/login/refresh', {
-//             refresh: authTokens.refresh?authTokens.refresh:authToken.refresh
-//           })
-//           .then(res => {
-//             // console.log(res)
-//             let accessToken = res.data.access
-//             authTokens.access = accessToken
-//             // then adds new access token to the storage(automatically to the authAtom too) and headers
-//             let stringTokens=JSON.stringify(authTokens)
-//             localStorage.setItem('diskGodUserToken', stringTokens)
-//             // console.log('isExpired:', isExpired, res, 'authTokens:',authTokens,'NewaccesToken:',accessToken)
-//           })
-//           .catch(err => {
-//             // alert(err)
-//             console.log(err)
-//           })
-//         } catch (error) {
-//           // alert(error.message)
-//           console.log(error)
-//         }
-//       }
-//       req.headers.Authorization = `Bearer ${authTokens.access}`
-//     return req
-//   })
-// }
+    if (isExpired && authTokens.refresh) {
+      try {
+        // console.log("Refreshing token...")
+        const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/account/login/refresh`, {
+          refresh: authTokens.refresh
+        })
+
+        const newAccessToken = res.data.access
+        authTokens.access = newAccessToken
+        localStorage.setItem('diskGodUserToken', JSON.stringify(authTokens))
+        req.headers.Authorization = `Bearer ${newAccessToken}`
+      } catch (err) {
+        console.log("Token Refresh Failed", err)
+        // potentially logout user here?
+      }
+    }
+  }
+  return req
+})
 
 export default instance

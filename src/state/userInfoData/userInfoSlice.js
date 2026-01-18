@@ -31,8 +31,33 @@ export const userInfoSlice = createSlice({
       return state;
     },
     addUser: (state, action) => {
-
-      state.newUser = action.payload;;
+      // payload can be just user object OR { user, token }
+      if (action.payload.token) {
+        state.token = action.payload.token;
+        state.user = action.payload.user; // standardized
+        state.newUser = action.payload.user; // legacy support
+      } else {
+        state.newUser = action.payload;
+        state.user = action.payload; // sync them
+      }
+    },
+    setToken: (state, action) => {
+      state.token = action.payload;
+    },
+    updateOnlineUser: (state, action) => {
+      const { userId, isOnline } = action.payload;
+      if (!state.onlineUsers) state.onlineUsers = {}; // Ensure it exists
+      if (isOnline) {
+        state.onlineUsers[userId] = true;
+      } else {
+        delete state.onlineUsers[userId];
+      }
+    },
+    logoutUser: (state) => {
+      state.user = initialState.user;
+      state.newUser = initialState.newUser;
+      state.token = "";
+      state.onlineUsers = {};
     },
     // addHomeDetail: (state, action) => {
     //   state.userName = action.payload.userName;
@@ -54,6 +79,7 @@ export const userInfoSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { getUser, addUser } = userInfoSlice.actions;
+// Action creators are generated for each case reducer function
+export const { getUser, addUser, updateOnlineUser, logoutUser, setToken } = userInfoSlice.actions;
 
 export default userInfoSlice.reducer;

@@ -17,29 +17,19 @@ export const ApiRequestHandler = async (
         response = await instance.get(url);
         break;
       case ApiMethods.PUT:
-        response = await instance.put(url,requestBody);
+        response = await instance.put(url, requestBody);
         break;
       case ApiMethods.POST:
-        response = await instance.post(url,requestBody);
+        response = await instance.post(url, requestBody);
         break;
-      // case ApiMethods.DELETE:
-      //   response = await del({
-      //     apiName: appConfig.APIGateway,
-      //     path: url,
-      //     options: {
-      //       ...headers,
-      //       queryParams: {
-      //         ...requestBody,
-      //       },
-      //     },
-      //   }).response;
-      //   break;
+      case ApiMethods.DELETE:
+        response = await instance.delete(url);
+        break;
       default:
         return;
     }
     fnSuccessCallback && (await fnSuccessCallback(response));
   } catch (e) {
-    console.log(e.response,'error')
     fnErrorCallback && (await fnErrorCallback(e.response));
   }
 };

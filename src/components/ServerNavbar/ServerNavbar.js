@@ -6,6 +6,7 @@ import HashtagSvg from "../../SVG/HashtagSvg";
 import { useDispatch, useSelector } from "react-redux";
 import InfoIcon from "@mui/icons-material/Info";
 import { setmuiOpen } from "../../state/muiModalState/muiModalState";
+import { openProfileModal } from "../../state/profileModal/profileModalSlice";
 export default function ServerNavbar({ isHome, serverDetail, toggleDrawer }) {
   var userDetail = useSelector((state) => state.userInfo.newUser);
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ export default function ServerNavbar({ isHome, serverDetail, toggleDrawer }) {
               },
             }}
             onClick={() => {
-              dispatch(setmuiOpen())
+              dispatch(openProfileModal(userDetail))
             }}
           />
         </Toolbar>
